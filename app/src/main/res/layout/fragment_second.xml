@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondFragment">
+    tools:context=".ui.SecondFragment">
 
     <Button
         android:id="@+id/button_second"
@@ -46,7 +46,7 @@
             android:inputType="time"
             app:layout_constraintBottom_toTopOf="@+id/end"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch1" />
+            app:layout_constraintTop_toBottomOf="@+id/ignoreDay" />
 
         <EditText
             android:id="@+id/end"
@@ -67,11 +67,11 @@
             app:layout_constraintTop_toBottomOf="@id/end" />
 
         <Switch
-            android:id="@+id/switch1"
+            android:id="@+id/ignoreDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Switch"
+            android:text="Vacation/Sick leave"
             app:layout_constraintBottom_toTopOf="@+id/start"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
