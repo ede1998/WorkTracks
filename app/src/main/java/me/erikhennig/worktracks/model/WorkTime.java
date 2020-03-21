@@ -16,4 +16,6 @@ public interface WorkTime {
     LocalTime getEndingTime();
 
     Duration getBreakDuration();
+
+    String getComment();
 }

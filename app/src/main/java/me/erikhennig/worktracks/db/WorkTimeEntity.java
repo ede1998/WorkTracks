@@ -31,13 +31,18 @@ public class WorkTimeEntity implements WorkTime {
     @NonNull
     private Duration breakDuration;
 
-    public WorkTimeEntity(int id, @NonNull LocalDate date, boolean ignore, @NonNull LocalTime startingTime, @NonNull LocalTime endingTime, @NonNull Duration breakDuration) {
+    @NonNull
+    private String comment;
+
+    public WorkTimeEntity(int id, @NonNull LocalDate date, boolean ignore, @NonNull LocalTime startingTime, @NonNull LocalTime endingTime, @NonNull Duration breakDuration, @NonNull String comment) {
         this.id = id;
         this.date = date;
         this.ignore = ignore;
         this.startingTime = startingTime;
         this.endingTime = endingTime;
         this.breakDuration = breakDuration;
+        this.comment = comment;
+
     }
     @Ignore
     public WorkTimeEntity(@NonNull WorkTime workTime)
@@ -48,6 +53,7 @@ public class WorkTimeEntity implements WorkTime {
         this.startingTime = workTime.getStartingTime();
         this.endingTime = workTime.getEndingTime();
         this.breakDuration = workTime.getBreakDuration();
+        this.comment = workTime.getComment();
     }
 
     @Override
@@ -84,6 +90,12 @@ public class WorkTimeEntity implements WorkTime {
         return this.breakDuration;
     }
 
+    @NonNull
+    @Override
+    public String getComment() {
+        return this.comment;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -106,5 +118,10 @@ public class WorkTimeEntity implements WorkTime {
 
     public void setBreakDuration(@NonNull Duration breakDuration) {
         this.breakDuration = breakDuration;
+    }
+
+    public void setComment(@NonNull String comment)
+    {
+        this.comment = comment;
     }
 }
