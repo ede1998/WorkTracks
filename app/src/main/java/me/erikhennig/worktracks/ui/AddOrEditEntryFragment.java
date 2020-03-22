@@ -11,7 +11,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -26,7 +25,7 @@ import java.util.function.Function;
 
 import me.erikhennig.worktracks.R;
 import me.erikhennig.worktracks.model.IWorkTime;
-import me.erikhennig.worktracks.model.TimeDurationFormatter;
+import me.erikhennig.worktracks.model.ChronoFormatter;
 import me.erikhennig.worktracks.model.WorkTime;
 import me.erikhennig.worktracks.viewmodel.WorkTimeViewModel;
 
@@ -59,6 +58,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         view.<EditText>findViewById(R.id.end).setOnFocusChangeListener(this);
         view.<EditText>findViewById(R.id.break_duration).setOnFocusChangeListener(this);
 
+        RegexColorDeciderFactory.registerDurationPositiveNegativeDecider(view.findViewById(R.id.difference));
+        RegexColorDeciderFactory.registerDurationPositiveNegativeDecider(view.findViewById(R.id.accumulated_difference));
+
         this.loadWorkTime(LocalDate.now());
         this.updateInputFields();
         this.updateTextViews();
@@ -78,15 +80,15 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
         switch (text.getId()) {
             case R.id.break_duration:
-                final Duration duration = parse(text, TimeDurationFormatter::parseDuration);
+                final Duration duration = parse(text, ChronoFormatter::parseDuration);
                 this.workTime.setBreakDuration(duration);
                 break;
             case R.id.start:
-                final LocalTime start = parse(text, TimeDurationFormatter::parseTime);
+                final LocalTime start = parse(text, ChronoFormatter::parseTime);
                 this.workTime.setStartingTime(start);
                 break;
             case R.id.end:
-                final LocalTime end = parse(text, TimeDurationFormatter::parseTime);
+                final LocalTime end = parse(text, ChronoFormatter::parseTime);
                 this.workTime.setEndingTime(end);
                 break;
         }
@@ -137,9 +139,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     private void updateInputFields() {
         View view = requireView();
 
-        String startingTime = format(this.workTime.getStartingTime(), TimeDurationFormatter::formatTime);
-        String endingTime = format(this.workTime.getEndingTime(), TimeDurationFormatter::formatTime);
-        String duration = format(this.workTime.getBreakDuration(), TimeDurationFormatter::formatDuration);
+        String startingTime = format(this.workTime.getStartingTime(), ChronoFormatter::formatTime);
+        String endingTime = format(this.workTime.getEndingTime(), ChronoFormatter::formatTime);
+        String duration = format(this.workTime.getBreakDuration(), ChronoFormatter::formatDuration);
         boolean ignore = this.workTime.getIgnore();
 
         view.<EditText>findViewById(R.id.start).setText(startingTime);
@@ -162,32 +164,19 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         String differenceString = this.getString(R.string.difference);
         String accumulatedDifferenceString = this.getString(R.string.accumulated_difference);
 
-        int positiveColor = ContextCompat.getColor(this.requireContext(), R.color.colorPositive);
-        int negativeColor = ContextCompat.getColor(this.requireContext(), R.color.colorNegative);
-        int neutralColor = ContextCompat.getColor(this.requireContext(), R.color.colorNeutral);
-
-        int differenceColor = neutralColor;
-        int accumulatedDifferenceColor = neutralColor;
-
         Duration duration = this.workTime.getWorkingDuration();
         if (duration != null) {
-            durationString = TimeDurationFormatter.formatDuration(duration);
+            durationString = ChronoFormatter.formatDuration(duration);
 
             // TODO extract as parameter
             final Duration expectedDuration = Duration.ofHours(7).plusMinutes(24);
             final Duration difference = duration.minus(expectedDuration);
-            differenceString = TimeDurationFormatter.formatDuration(difference);
-            differenceColor = difference.isNegative()? negativeColor: positiveColor;
-            differenceColor = difference.isZero()? neutralColor: differenceColor;
-
-            accumulatedDifferenceColor = neutralColor;
+            differenceString = ChronoFormatter.formatDuration(difference);
         }
 
         view.<TextView>findViewById(R.id.duration).setText(durationString);
-        view.<TextView>findViewById(R.id.difference).setTextColor(differenceColor);
         view.<TextView>findViewById(R.id.difference).setText(differenceString);
         view.<TextView>findViewById(R.id.accumulated_difference).setText(accumulatedDifferenceString);
-        view.<TextView>findViewById(R.id.accumulated_difference).setTextColor(accumulatedDifferenceColor);
     }
 
     private void navigateToTable() {

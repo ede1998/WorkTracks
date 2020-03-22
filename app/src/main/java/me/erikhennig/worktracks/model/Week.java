@@ -34,11 +34,19 @@ public class Week {
                 .collect(Collectors.toList());
     }
 
-    int getWeek() {
+    public LocalDate getFirstDayOfWeek() {
+        return this.firstDayOfWeek;
+    }
+
+    public LocalDate getLastDayOfWeek() {
+        return this.firstDayOfWeek.plusDays(6);
+    }
+
+    public int getWeek() {
         return this.firstDayOfWeek.get(WeekFields.weekOfYear());
     }
 
-    int getYear() {
+    public int getYear() {
         return this.firstDayOfWeek.getYear();
     }
 }

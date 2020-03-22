@@ -48,7 +48,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/break_duration"
+                    android:id="@+id/text_break"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"

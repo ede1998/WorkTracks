@@ -29,12 +29,12 @@
             android:src="@android:drawable/ic_media_rew" />
 
         <TextView
-            android:id="@+id/text_week_end"
+            android:id="@+id/text_week_start"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
             android:gravity="center_vertical"
-            android:text="last day"
+            android:text="first day"
             android:textAlignment="center"
             android:textColor="@android:color/primary_text_dark" />
 
@@ -50,12 +50,12 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/text_week_start"
+            android:id="@+id/text_week_end"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
             android:gravity="center_vertical"
-            android:text="first day"
+            android:text="last day"
             android:textAlignment="center"
             android:textColor="@android:color/primary_text_dark" />
 
@@ -80,6 +80,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <LinearLayout
+            android:id="@+id/linear_layout_all_week_times"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
