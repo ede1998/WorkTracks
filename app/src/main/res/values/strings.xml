@@ -10,4 +10,8 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="save">Save</string>
+    <string name="vacation_sick_leave">Vacation/Sick leave</string>
+    <string name="duration">Duration</string>
+    <string name="accumulated_difference">Accumulated difference</string>
+    <string name="difference">Difference</string>
 </resources>

@@ -8,8 +8,10 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,10 +22,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.Locale;
+import java.util.function.Function;
 
 import me.erikhennig.worktracks.R;
 import me.erikhennig.worktracks.model.IWorkTime;
+import me.erikhennig.worktracks.model.TimeDurationFormatter;
 import me.erikhennig.worktracks.model.WorkTime;
 import me.erikhennig.worktracks.viewmodel.WorkTimeViewModel;
 
@@ -44,8 +47,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         workTimeViewModel = new ViewModelProvider(requireActivity()).get(WorkTimeViewModel.class);
 
         view.<CalendarView>findViewById(R.id.calendar).setOnDateChangeListener((clickedView, year, zeroBasedMonth, day) -> {
-            this.workTime.setDate(LocalDate.of(year, zeroBasedMonth + 1, day));
+            this.loadWorkTime(LocalDate.of(year, zeroBasedMonth + 1, day));
             this.updateInputFields();
+            this.updateTextViews();
         });
 
         view.<Button>findViewById(R.id.cancel).setOnClickListener(clickedView -> this.navigateToTable());
@@ -55,9 +59,14 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         view.<EditText>findViewById(R.id.end).setOnFocusChangeListener(this);
         view.<EditText>findViewById(R.id.break_duration).setOnFocusChangeListener(this);
 
-        this.workTime = new WorkTime();
-        this.workTime.setDate(LocalDate.now());
+        this.loadWorkTime(LocalDate.now());
         this.updateInputFields();
+        this.updateTextViews();
+    }
+
+    private void loadWorkTime(LocalDate date) {
+        IWorkTime wt = this.workTimeViewModel.getWorkTime(date);
+        this.workTime = wt != null ? new WorkTime(wt) : new WorkTime(date);
     }
 
     @Override
@@ -66,29 +75,27 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
         EditText text = (EditText) view;
 
-        LocalTime time = parseTime(text);
 
-        switch (text.getId())
-        {
+        switch (text.getId()) {
             case R.id.break_duration:
-                Duration breakDuration = null;
-                if (time != null) {
-                    breakDuration = Duration.between(LocalTime.of(0, 0), time);
-                }
-                this.workTime.setBreakDuration(breakDuration);
+                final Duration duration = parse(text, TimeDurationFormatter::parseDuration);
+                this.workTime.setBreakDuration(duration);
                 break;
             case R.id.start:
-                this.workTime.setStartingTime(time);
+                final LocalTime start = parse(text, TimeDurationFormatter::parseTime);
+                this.workTime.setStartingTime(start);
                 break;
             case R.id.end:
-                this.workTime.setEndingTime(time);
+                final LocalTime end = parse(text, TimeDurationFormatter::parseTime);
+                this.workTime.setEndingTime(end);
                 break;
         }
 
         this.updateTextViews();
     }
 
-    private static LocalTime parseTime(EditText textField) {
+
+    private static <T> T parse(EditText textField, Function<String, T> parser) {
         String inputName = "UNKNOWN";
         switch (textField.getId()) {
             case R.id.start:
@@ -103,7 +110,7 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         }
 
         try {
-            return LocalTime.parse(textField.getText().toString());
+            return parser.apply(textField.getText().toString());
         } catch (DateTimeParseException e) {
             String errorMessage = "Input '" + e.getParsedString() + "' in field " + inputName + " could not be parsed.";
             Snackbar snackbar = Snackbar.make(textField, errorMessage, Snackbar.LENGTH_SHORT);
@@ -125,25 +132,15 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         this.workTimeViewModel.insertOrUpdate(this.workTime);
 
         this.navigateToTable();
-    };
+    }
 
     private void updateInputFields() {
         View view = requireView();
 
-        String startingTime = "";
-        String endingTime = "";
-        String duration = "";
-        boolean ignore = false;
-
-        IWorkTime wt = this.workTimeViewModel.getWorkTime(this.workTime.getDate());
-        if (wt != null) {
-            this.workTime = new WorkTime(wt);
-            startingTime = wt.getStartingTime().toString();
-            endingTime = wt.getEndingTime().toString();
-            final long durationInMinutes = wt.getBreakDuration().toMinutes();
-            duration = String.format(Locale.getDefault(), "%02d:%02d", durationInMinutes / 60, durationInMinutes % 60);
-            ignore = wt.getIgnore();
-        }
+        String startingTime = format(this.workTime.getStartingTime(), TimeDurationFormatter::formatTime);
+        String endingTime = format(this.workTime.getEndingTime(), TimeDurationFormatter::formatTime);
+        String duration = format(this.workTime.getBreakDuration(), TimeDurationFormatter::formatDuration);
+        boolean ignore = this.workTime.getIgnore();
 
         view.<EditText>findViewById(R.id.start).setText(startingTime);
         view.<EditText>findViewById(R.id.end).setText(endingTime);
@@ -151,9 +148,46 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         view.<Switch>findViewById(R.id.ignoreDay).setChecked(ignore);
     }
 
+    private static <T> String format(T value, Function<T, String> formatter)
+    {
+        if (value == null)
+            return "";
+        return formatter.apply(value);
+    }
+
     private void updateTextViews() {
         View view = requireView();
 
+        String durationString = this.getString(R.string.duration);
+        String differenceString = this.getString(R.string.difference);
+        String accumulatedDifferenceString = this.getString(R.string.accumulated_difference);
+
+        int positiveColor = ContextCompat.getColor(this.requireContext(), R.color.colorPositive);
+        int negativeColor = ContextCompat.getColor(this.requireContext(), R.color.colorNegative);
+        int neutralColor = ContextCompat.getColor(this.requireContext(), R.color.colorNeutral);
+
+        int differenceColor = neutralColor;
+        int accumulatedDifferenceColor = neutralColor;
+
+        Duration duration = this.workTime.getWorkingDuration();
+        if (duration != null) {
+            durationString = TimeDurationFormatter.formatDuration(duration);
+
+            // TODO extract as parameter
+            final Duration expectedDuration = Duration.ofHours(7).plusMinutes(24);
+            final Duration difference = duration.minus(expectedDuration);
+            differenceString = TimeDurationFormatter.formatDuration(difference);
+            differenceColor = difference.isNegative()? negativeColor: positiveColor;
+            differenceColor = difference.isZero()? neutralColor: differenceColor;
+
+            accumulatedDifferenceColor = neutralColor;
+        }
+
+        view.<TextView>findViewById(R.id.duration).setText(durationString);
+        view.<TextView>findViewById(R.id.difference).setTextColor(differenceColor);
+        view.<TextView>findViewById(R.id.difference).setText(differenceString);
+        view.<TextView>findViewById(R.id.accumulated_difference).setText(accumulatedDifferenceString);
+        view.<TextView>findViewById(R.id.accumulated_difference).setTextColor(accumulatedDifferenceColor);
     }
 
     private void navigateToTable() {

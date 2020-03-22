@@ -17,6 +17,10 @@ public class WorkTime implements IWorkTime {
 
     }
 
+    public WorkTime(LocalDate date) {
+        this.date = date;
+    }
+
     public WorkTime(LocalDate date, boolean ignore, LocalTime startingTime, LocalTime endingTime, Duration breakDuration, String comment) {
         this.id = -1;
         this.date = date;
