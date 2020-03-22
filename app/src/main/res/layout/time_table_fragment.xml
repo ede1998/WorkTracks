@@ -6,6 +6,90 @@
     android:layout_height="match_parent"
     tools:context=".ui.TimeTableFragment">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center"
+            android:text="TextView"
+            tools:text="@tools:sample/date/day_of_week" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/weekday_1"
+                layout="@layout/week_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/weekday_2"
+                layout="@layout/week_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/weekday_3"
+                layout="@layout/week_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/weekday_4"
+                layout="@layout/week_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/weekday_5"
+                layout="@layout/week_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/weekday_6"
+                layout="@layout/week_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/weekday_7"
+                layout="@layout/week_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addOrEdit"
         android:layout_width="wrap_content"
@@ -17,23 +101,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="50dp"
         app:srcCompat="@android:drawable/ic_input_add" />
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/week_day" />
-
-        <include layout="@layout/week_day" />
-
-        <include layout="@layout/week_day" />
-
-        <include layout="@layout/week_day" />
-
-        <include layout="@layout/week_day" />
-
-        <include layout="@layout/week_day" />
-
-    </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

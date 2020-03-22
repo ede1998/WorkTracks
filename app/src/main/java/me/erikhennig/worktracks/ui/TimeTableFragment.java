@@ -39,7 +39,7 @@ public class TimeTableFragment extends Fragment {
 
         view.<FloatingActionButton>findViewById(R.id.addOrEdit).setOnClickListener(this.buttonClick);
 
-        TextView date = view.findViewById(R.id.date);
+        //TextView date = view.findViewById(R.id.date);
         //workTimeViewModel.getWorkTimes(displayedWeek).observe(getViewLifecycleOwner(), x -> date.setText(x.get(0).getDate().toString()));
     }
 
