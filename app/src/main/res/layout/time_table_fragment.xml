@@ -9,21 +9,65 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
         android:orientation="horizontal"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView"
+        <ImageButton
+            android:id="@+id/button_previous_week"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
+            android:background="@drawable/round_corner"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@android:drawable/ic_media_rew" />
+
+        <TextView
+            android:id="@+id/text_week_end"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:text="last day"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/text_current_week"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
             android:gravity="center"
-            android:text="TextView"
-            tools:text="@tools:sample/date/day_of_week" />
+            android:text="calendar week"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_week_start"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:text="first day"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF" />
+
+        <ImageButton
+            android:id="@+id/button_next_week"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:background="@drawable/round_corner"
+            android:backgroundTint="@color/colorPrimary"
+            android:longClickable="false"
+            android:src="@android:drawable/ic_media_ff" />
     </LinearLayout>
 
     <ScrollView
