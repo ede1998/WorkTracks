@@ -8,39 +8,45 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Converters {
+    @NonNull
     @TypeConverter
-    public static LocalDate toLocalDate(long epochDay)
+    public static LocalDate toLocalDate(@NonNull String date)
     {
-        return LocalDate.ofEpochDay(epochDay);
+        return LocalDate.parse(date);
     }
 
+    @NonNull
     @TypeConverter
-    public static long toEpochDay(@NonNull LocalDate date)
+    public static String toISO8601Date(@NonNull LocalDate date)
     {
-        return date.toEpochDay();
+        return date.toString();
     }
 
+    @NonNull
     @TypeConverter
-    public static LocalTime toLocalTime(long secondOfDay)
+    public static LocalTime toLocalTime(@NonNull String time)
     {
-        return LocalTime.ofSecondOfDay(secondOfDay);
+        return LocalTime.parse(time);
     }
 
+    @NonNull
     @TypeConverter
-    public static long toSecondOfDay(@NonNull LocalTime time)
+    public static String toISO8601Time(@NonNull LocalTime time)
     {
-        return time.toSecondOfDay();
+        return time.toString();
     }
 
+    @NonNull
     @TypeConverter
-    public static Duration toDuration(long seconds)
+    public static Duration toDuration(@NonNull String duration)
     {
-        return Duration.ofSeconds(seconds);
+        return Duration.parse(duration);
     }
 
+    @NonNull
     @TypeConverter
-    public static long toSeconds(@NonNull Duration duration)
+    public static String toISO8601Duration(@NonNull Duration duration)
     {
-        return duration.getSeconds();
+        return duration.toString();
     }
 }

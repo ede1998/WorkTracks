@@ -4,21 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SecondFragment">
+    tools:context=".ui.AddOrEditEntryFragment">
 
     <Button
-        android:id="@+id/button_second"
-        android:layout_width="wrap_content"
+        android:id="@+id/cancel"
+        android:layout_width="204dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/previous"
+        android:text="@android:string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayout" />
+        app:layout_constraintStart_toEndOf="@+id/save" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="204dp"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="OnClick" />
 
     <CalendarView
-        android:id="@+id/calendarView2"
+        android:id="@+id/calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -33,20 +43,8 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_second"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView2">
-
-        <EditText
-            android:id="@+id/start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:ems="10"
-            android:inputType="time"
-            app:layout_constraintBottom_toTopOf="@+id/end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ignoreDay" />
+        app:layout_constraintBottom_toTopOf="@+id/cancel"
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
 
         <EditText
             android:id="@+id/end"
@@ -66,6 +64,18 @@
             app:layout_constraintStart_toStartOf="@+id/end"
             app:layout_constraintTop_toBottomOf="@id/end" />
 
+        <EditText
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:ems="10"
+            android:inputType="time"
+            app:layout_constraintBottom_toTopOf="@+id/end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ignoreDay" />
+
         <Switch
             android:id="@+id/ignoreDay"
             android:layout_width="wrap_content"
@@ -77,16 +87,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/difference"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Difference"
-            app:layout_constraintBottom_toBottomOf="@+id/end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/end"
-            app:layout_constraintTop_toTopOf="@+id/end" />
 
         <TextView
             android:id="@+id/duration"
@@ -107,6 +107,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/break_duration"
             app:layout_constraintTop_toTopOf="@+id/break_duration" />
+
+        <TextView
+            android:id="@+id/difference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Difference"
+            app:layout_constraintBottom_toBottomOf="@+id/end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/end"
+            app:layout_constraintTop_toTopOf="@+id/end" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

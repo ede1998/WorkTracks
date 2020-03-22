@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import me.erikhennig.worktracks.db.AppDatabase;
 import me.erikhennig.worktracks.db.WorkTimeEntity;
 import me.erikhennig.worktracks.model.Week;
-import me.erikhennig.worktracks.model.WorkTime;
+import me.erikhennig.worktracks.model.IWorkTime;
 
 public class AppRepository {
     private static AppRepository INSTANCE;
@@ -32,35 +35,47 @@ public class AppRepository {
         return INSTANCE;
     }
 
-    public List<WorkTimeEntity> getAllWorkTimes() {
-        return this.database.workTimeDao().getAllWorkTimes();
+    public List<IWorkTime> getAllWorkTimes() {
+        Future<List<IWorkTime>> f = AppDatabase.databaseExecutor.submit(() -> (List<IWorkTime>) (Object) this.database.workTimeDao().getAllWorkTimes());
+        try {
+            return f.get();
+        } catch (ExecutionException | InterruptedException e) {
+            // TODO add logging?
+        }
+        return new ArrayList<>();
     }
 
-    public LiveData<List<WorkTimeEntity>> getWorkTimes(LocalDate dayInWeek) {
-        List<LocalDate> daysOfWeek = new Week(dayInWeek).getDates();
-        return this.database.workTimeDao().getWorkTimes(daysOfWeek.toArray(new LocalDate[1]));
+    public LiveData<List<IWorkTime>> getWorkTimes(Week week) {
+        List<LocalDate> daysOfWeek = week.getDates();
+        return (LiveData<List<IWorkTime>>) (Object) this.database.workTimeDao().getWorkTimes(daysOfWeek.toArray(new LocalDate[1]));
     }
 
-    public WorkTime getWorkTime(@NonNull LocalDate date) {
-        return this.database.workTimeDao().getWorkTime(date);
+    public IWorkTime getWorkTime(@NonNull LocalDate date) {
+        Future<IWorkTime> f = AppDatabase.databaseExecutor.submit(() -> this.database.workTimeDao().getWorkTime(date));
+        try {
+            return f.get();
+        } catch (ExecutionException | InterruptedException e) {
+            // TODO add logging?
+        }
+        return null;
     }
 
-    public void insert(WorkTime... workTimes) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
+    public void insert(IWorkTime... workTimes) {
+        AppDatabase.databaseExecutor.execute(() -> {
             WorkTimeEntity[] entities = Arrays.stream(workTimes).map(WorkTimeEntity::new).toArray(WorkTimeEntity[]::new);
             this.database.workTimeDao().insert(entities);
         });
     }
 
-    public void delete(@NonNull WorkTime workTime) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
+    public void delete(@NonNull IWorkTime workTime) {
+        AppDatabase.databaseExecutor.execute(() -> {
             WorkTimeEntity entity = new WorkTimeEntity(workTime);
             this.database.workTimeDao().delete(entity);
         });
     }
 
-    public void update(@NonNull WorkTime workTime) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
+    public void update(@NonNull IWorkTime workTime) {
+        AppDatabase.databaseExecutor.execute(() -> {
             WorkTimeEntity entity = new WorkTimeEntity(workTime);
             this.database.workTimeDao().update(entity);
         });

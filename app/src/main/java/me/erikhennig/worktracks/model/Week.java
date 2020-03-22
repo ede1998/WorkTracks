@@ -11,15 +11,21 @@ public class Week {
     private LocalDate firstDayOfWeek;
     private static WeekFields WeekFields = java.time.temporal.WeekFields.of(Locale.getDefault());
 
-    public Week(int year, int weekOfYear) {
-        this.firstDayOfWeek = LocalDate.of(year, 1, 1)
-                .with(WeekFields.weekOfYear(), weekOfYear)
-                .with(WeekFields.dayOfWeek(), 1);
-
+    public static Week now() {
+        Week w =  new Week();
+        w.firstDayOfWeek = LocalDate.now().with(WeekFields.dayOfWeek(), 1);
+        return w;
     }
 
-    public Week(LocalDate date) {
-        this.firstDayOfWeek = date.with(WeekFields.dayOfWeek(), 1);
+    public static Week of(int year, int weekOfYear) {
+        Week w = new Week();
+        w.firstDayOfWeek = LocalDate.of(year, 1, 1)
+                .with(WeekFields.weekOfYear(), weekOfYear)
+                .with(WeekFields.dayOfWeek(), 1);
+        return w;
+    }
+
+    private Week() {
     }
 
     public List<LocalDate> getDates() {

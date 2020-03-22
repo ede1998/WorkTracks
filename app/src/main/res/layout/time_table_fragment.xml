@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.FirstFragment">
+    tools:context=".ui.TimeTableFragment">
 
-    <Button
-        android:id="@+id/button_first"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addOrEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:maxImageSize="50dp"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <TableLayout
         android:layout_width="match_parent"

@@ -13,13 +13,13 @@ import java.util.List;
 
 @Dao
 public interface WorkTimeDao {
-    @Query("SELECT * FROM WorkTimeEntity")
+    @Query("SELECT * FROM work_time")
     List<WorkTimeEntity> getAllWorkTimes();
 
-    @Query("SELECT * FROM WorkTimeEntity WHERE date IN (:dates)")
+    @Query("SELECT * FROM work_time WHERE date IN (:dates)")
     LiveData<List<WorkTimeEntity>> getWorkTimes(@NonNull LocalDate[] dates);
 
-    @Query("SELECT * FROM user WHERE date = :date")
+    @Query("SELECT * FROM work_time WHERE date = :date")
     WorkTimeEntity getWorkTime(@NonNull LocalDate date);
 
     @Insert

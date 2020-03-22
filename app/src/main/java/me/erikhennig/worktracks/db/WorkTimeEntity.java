@@ -10,10 +10,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import me.erikhennig.worktracks.model.WorkTime;
+import me.erikhennig.worktracks.model.IWorkTime;
 
 @Entity(tableName = "work_time", indices = {@Index(value = {"date"}, unique = true)})
-public class WorkTimeEntity implements WorkTime {
+public class WorkTimeEntity implements IWorkTime {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -31,10 +31,9 @@ public class WorkTimeEntity implements WorkTime {
     @NonNull
     private Duration breakDuration;
 
-    @NonNull
     private String comment;
 
-    public WorkTimeEntity(int id, @NonNull LocalDate date, boolean ignore, @NonNull LocalTime startingTime, @NonNull LocalTime endingTime, @NonNull Duration breakDuration, @NonNull String comment) {
+    public WorkTimeEntity(int id, @NonNull LocalDate date, boolean ignore, @NonNull LocalTime startingTime, @NonNull LocalTime endingTime, @NonNull Duration breakDuration, String comment) {
         this.id = id;
         this.date = date;
         this.ignore = ignore;
@@ -45,9 +44,8 @@ public class WorkTimeEntity implements WorkTime {
 
     }
     @Ignore
-    public WorkTimeEntity(@NonNull WorkTime workTime)
+    public WorkTimeEntity(@NonNull IWorkTime workTime)
     {
-        this.id = workTime.getId();
         this.date = workTime.getDate();
         this.ignore = workTime.getIgnore();
         this.startingTime = workTime.getStartingTime();
@@ -90,38 +88,9 @@ public class WorkTimeEntity implements WorkTime {
         return this.breakDuration;
     }
 
-    @NonNull
     @Override
     public String getComment() {
         return this.comment;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDate(@NonNull LocalDate date) {
-        this.date = date;
-    }
-
-    public void setIgnore(boolean ignore) {
-        this.ignore = ignore;
-    }
-
-    public void setStartingTime(@NonNull LocalTime startingTime) {
-        this.startingTime = startingTime;
-    }
-
-    public void setEndingTime(@NonNull LocalTime endingTime) {
-        this.endingTime = endingTime;
-    }
-
-    public void setBreakDuration(@NonNull Duration breakDuration) {
-        this.breakDuration = breakDuration;
-    }
-
-    public void setComment(@NonNull String comment)
-    {
-        this.comment = comment;
-    }
 }

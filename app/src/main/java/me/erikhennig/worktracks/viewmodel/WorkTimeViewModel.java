@@ -10,39 +10,45 @@ import java.time.LocalDate;
 import java.util.List;
 
 import me.erikhennig.worktracks.AppRepository;
-import me.erikhennig.worktracks.db.WorkTimeEntity;
-import me.erikhennig.worktracks.model.WorkTime;
+import me.erikhennig.worktracks.WorkTracksApp;
+import me.erikhennig.worktracks.model.Week;
+import me.erikhennig.worktracks.model.IWorkTime;
 
 public class WorkTimeViewModel extends AndroidViewModel {
 
     private AppRepository repository;
 
-    public WorkTimeViewModel(@NonNull Application application, @NonNull AppRepository repository) {
+    public WorkTimeViewModel(@NonNull Application application) {
         super(application);
-        this.repository = repository;
+        WorkTracksApp app = (WorkTracksApp) application;
+        this.repository = app.getRepository();
     }
 
-    public List<WorkTimeEntity> getAllWorkTimes() {
+    public List<IWorkTime> getAllWorkTimes() {
         return this.repository.getAllWorkTimes();
     }
 
-    public LiveData<List<WorkTimeEntity>> getWorkTimes(LocalDate dayInWeek) {
-        return this.repository.getWorkTimes(dayInWeek);
+    public LiveData<List<IWorkTime>> getWorkTimes(Week week) {
+        return this.repository.getWorkTimes(week);
     }
 
-    public WorkTime getWorkTime(@NonNull LocalDate date) {
+    public IWorkTime getWorkTime(@NonNull LocalDate date) {
         return this.repository.getWorkTime(date);
     }
 
-    public void insert(WorkTime... workTimes) {
-        this.repository.insert(workTimes);
+    public void insertOrUpdate(IWorkTime workTime) {
+        IWorkTime wt = this.repository.getWorkTime(workTime.getDate());
+        if (wt != null)
+        {
+            this.repository.update(workTime);
+        }
+        else
+        {
+            this.repository.insert(workTime);
+        }
     }
 
-    public void delete(@NonNull WorkTime workTime) {
+    public void delete(@NonNull IWorkTime workTime) {
         this.repository.delete(workTime);
-    }
-
-    public void update(@NonNull WorkTime workTime) {
-        this.repository.update(workTime);
     }
 }
