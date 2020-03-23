@@ -17,6 +17,12 @@ public class Week {
         return w;
     }
 
+    public static Week of(LocalDate date) {
+        Week w = new Week();
+        w.firstDayOfWeek = date.with(WeekFields.dayOfWeek(), 1);
+        return w;
+    }
+
     public static Week of(int year, int weekOfYear) {
         Week w = new Week();
         w.firstDayOfWeek = LocalDate.of(year, 1, 1)
@@ -26,6 +32,16 @@ public class Week {
     }
 
     private Week() {
+    }
+
+    public Week plus(int weeks) {
+        Week w = new Week();
+        w.firstDayOfWeek = this.firstDayOfWeek.plusDays(7 * weeks);
+        return w;
+    }
+
+    public Week minus(int weeks) {
+        return this.plus(-weeks);
     }
 
     public List<LocalDate> getDates() {

@@ -1,5 +1,6 @@
 package me.erikhennig.worktracks.ui;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -24,12 +26,11 @@ import me.erikhennig.worktracks.model.ChronoFormatter;
 import me.erikhennig.worktracks.model.IWorkTime;
 import me.erikhennig.worktracks.model.Week;
 import me.erikhennig.worktracks.model.WorkTime;
-import me.erikhennig.worktracks.viewmodel.WorkTimeViewModel;
+import me.erikhennig.worktracks.viewmodel.WorkWeekViewModel;
 
 public class TimeTableFragment extends Fragment {
 
-    private WorkTimeViewModel workTimeViewModel;
-    private Week displayedWeek;
+    private WorkWeekViewModel workWeekViewModel;
 
     @Override
     public View onCreateView(
@@ -43,29 +44,34 @@ public class TimeTableFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        this.workTimeViewModel = new ViewModelProvider(requireActivity()).get(WorkTimeViewModel.class);
-        this.displayedWeek = Week.now();
+        this.workWeekViewModel = new ViewModelProvider(requireActivity()).get(WorkWeekViewModel.class);
+        this.workWeekViewModel.getWorkTimes().observe(this.getViewLifecycleOwner(), this::updateTimeTable);
 
         view.<FloatingActionButton>findViewById(R.id.addOrEdit).setOnClickListener(clickedView -> this.navigateToAddOrEdit());
-        this.applyToAllCards(R.id.text_difference, x -> RegexColorDeciderFactory.registerDurationPositiveNegativeDecider((TextView) x));
-        this.applyToAllCards(R.id.text_accumulated_difference, x -> RegexColorDeciderFactory.registerDurationPositiveNegativeDecider((TextView) x));
+        view.findViewById(R.id.button_next_week).setOnClickListener(clickedView -> this.workWeekViewModel.increaseWeek());
+        view.findViewById(R.id.button_previous_week).setOnClickListener(clickedView -> this.workWeekViewModel.decreaseWeek());
+        view.findViewById(R.id.text_current_week).setOnClickListener(clickedView -> this.onWeekClick());
 
-        this.displayedWeek = Week.now();
-
-        workTimeViewModel.getWorkTimes(displayedWeek).observe(this.getViewLifecycleOwner(), this::updateTimeTable);
+        this.getAllElements(R.id.text_difference).forEach(x -> RegexColorDeciderFactory.registerDurationPositiveNegativeDecider((TextView) x));
+        this.getAllElements(R.id.text_accumulated_difference).forEach(x -> RegexColorDeciderFactory.registerDurationPositiveNegativeDecider((TextView) x));
     }
 
-    @FunctionalInterface
-    private interface Method {
-        void call(View view);
-    }
+    private void onWeekClick() {
+        DatePickerDialog picker = new DatePickerDialog(this.requireContext());
+        LocalDate dayOfCurrentWeek = this.workWeekViewModel.getWeek().getFirstDayOfWeek();
+        picker.updateDate(dayOfCurrentWeek.getYear(), dayOfCurrentWeek.getMonthValue() - 1, dayOfCurrentWeek.getDayOfMonth());
+        picker.setOnDateSetListener((clickedView, year, zeroBasedMonth, day) -> this.workWeekViewModel.setWeek(Week.of(LocalDate.of(year, zeroBasedMonth + 1, day))));
+        picker.show();
+    };
 
-    private void applyToAllCards(int elementId, Method method) {
-        ViewGroup allWeekTimes = this.requireView().findViewById(R.id.linear_layout_all_week_times);
+    private List<View> getAllElements(int elementId) {
+        final ViewGroup allWeekTimes = this.requireView().findViewById(R.id.linear_layout_all_week_times);
+        final ArrayList<View> elements  = new ArrayList<>();
+
         for (int i = 0; i < allWeekTimes.getChildCount(); ++i) {
-            View card = allWeekTimes.getChildAt(i);
-            method.call(card.findViewById(elementId));
+            elements.add(allWeekTimes.getChildAt(i).findViewById(elementId));
         }
+        return elements;
     }
 
     private void navigateToAddOrEdit() {
@@ -77,16 +83,16 @@ public class TimeTableFragment extends Fragment {
 
         this.updateHeader(view);
 
-        List<IWorkTime> timesInWeekWithoutGap = this.displayedWeek.getDates().stream()
+        List<IWorkTime> timesInWeekWithoutGap = this.workWeekViewModel.getWeek().getDates().stream()
                 .map(d -> timesInWeek.stream()
                         .filter(wt -> wt.getDate().isEqual(d))
                         .findFirst()
                         .orElse(null))
                 .collect(Collectors.toList());
 
-        ViewGroup allWeekTimes = view.findViewById(R.id.linear_layout_all_week_times);
-        for (int i = 0; i < allWeekTimes.getChildCount(); ++i) {
-            this.updateCard(allWeekTimes.getChildAt(i), timesInWeekWithoutGap.get(i));
+        int i = 0;
+        for(View card: this.getAllElements(R.id.card_view_week_day)){
+            this.updateCard(card, timesInWeekWithoutGap.get(i++));
         }
     }
 
@@ -95,9 +101,9 @@ public class TimeTableFragment extends Fragment {
         TextView weekStart = root.findViewById(R.id.text_week_start);
         TextView weekEnd = root.findViewById(R.id.text_week_end);
 
-        Week currentWeek = this.displayedWeek;
-        LocalDate firstDay = this.displayedWeek.getFirstDayOfWeek();
-        LocalDate lastDay = this.displayedWeek.getLastDayOfWeek();
+        Week currentWeek = this.workWeekViewModel.getWeek();
+        LocalDate firstDay = currentWeek.getFirstDayOfWeek();
+        LocalDate lastDay = currentWeek.getLastDayOfWeek();
 
         week.setText(ChronoFormatter.formatWeek(currentWeek));
         weekStart.setText(ChronoFormatter.formatDate(firstDay));
@@ -109,6 +115,7 @@ public class TimeTableFragment extends Fragment {
             card.setVisibility(View.GONE);
             return;
         }
+        card.setVisibility(View.VISIBLE);
 
         WorkTime wt = new WorkTime(workTime);
 
