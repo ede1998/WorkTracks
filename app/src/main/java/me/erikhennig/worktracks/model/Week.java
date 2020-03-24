@@ -65,4 +65,9 @@ public class Week {
     public int getYear() {
         return this.firstDayOfWeek.getYear();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Week([%s]-[%s])", this.getYear(), this.getWeek());
+    }
 }

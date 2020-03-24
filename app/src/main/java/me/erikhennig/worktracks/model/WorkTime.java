@@ -3,6 +3,7 @@ package me.erikhennig.worktracks.model;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Locale;
 
 public class WorkTime implements IWorkTime {
     private int id;
@@ -53,6 +54,20 @@ public class WorkTime implements IWorkTime {
         Duration withBreak = totalDuration.minus(this.breakDuration);
 
         return withBreak;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(),
+                "WorkTime(Id: [%d], Date: [%s], Ignore: [%s], Start: [%s], End: [%s], Break: [%s], Comment: [%s])",
+                this.id,
+                this.date,
+                this.ignore,
+                this.startingTime,
+                this.endingTime,
+                this.breakDuration,
+                this.comment
+        );
     }
 
     @Override

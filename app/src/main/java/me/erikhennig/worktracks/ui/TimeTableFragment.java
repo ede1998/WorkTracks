@@ -2,6 +2,7 @@ package me.erikhennig.worktracks.ui;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ import me.erikhennig.worktracks.viewmodel.WorkWeekViewModel;
 
 public class TimeTableFragment extends Fragment {
 
+    private static final String TAG = TimeTableFragment.class.getName();
+
     private WorkWeekViewModel workWeekViewModel;
 
     @Override
@@ -57,14 +60,17 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void onWeekClick() {
+        Log.i(TAG, "Opening week selection pop up.");
         DatePickerDialog picker = new DatePickerDialog(this.requireContext());
         LocalDate dayOfCurrentWeek = this.workWeekViewModel.getWeek().getFirstDayOfWeek();
         picker.updateDate(dayOfCurrentWeek.getYear(), dayOfCurrentWeek.getMonthValue() - 1, dayOfCurrentWeek.getDayOfMonth());
-        picker.setOnDateSetListener((clickedView, year, zeroBasedMonth, day) -> this.workWeekViewModel.setWeek(Week.of(LocalDate.of(year, zeroBasedMonth + 1, day))));
+        picker.setOnDateSetListener((clickedView, year, zeroBasedMonth, day) -> {
+            Week week = Week.of(LocalDate.of(year, zeroBasedMonth + 1, day));
+            Log.i(TAG, String.format("Week [%s] was selected.", week));
+            this.workWeekViewModel.setWeek(week);
+        });
         picker.show();
     }
-
-    ;
 
     private List<View> getAllElements(int elementId) {
         final ViewGroup allWeekTimes = this.requireView().findViewById(R.id.linear_layout_all_week_times);
@@ -77,10 +83,12 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void navigateToAddOrEdit() {
+        Log.i(TAG, "Swapping to add or edit fragment.");
         NavHostFragment.findNavController(TimeTableFragment.this).navigate(R.id.action_to_add_or_edit);
     }
 
     private void updateTimeTable(List<IWorkTime> timesInWeek) {
+        Log.i(TAG, "Updating fragment");
         View view = this.requireView();
 
         this.updateHeader(view);
@@ -99,6 +107,7 @@ public class TimeTableFragment extends Fragment {
     }
 
     private void updateHeader(View root) {
+        Log.i(TAG, "Updating header line");
         TextView week = root.findViewById(R.id.text_current_week);
         TextView weekStart = root.findViewById(R.id.text_week_start);
         TextView weekEnd = root.findViewById(R.id.text_week_end);
@@ -114,9 +123,11 @@ public class TimeTableFragment extends Fragment {
 
     private void updateCard(View card, IWorkTime workTime) {
         if (workTime == null) {
+            Log.i(TAG, String.format("Setting visibility of card [%s] to GONE", card.getId()));
             card.setVisibility(View.GONE);
             return;
         }
+        Log.i(TAG, String.format("Making card [%s] VISIBLE and updating it.", card.getId()));
         card.setVisibility(View.VISIBLE);
 
         WorkTime wt = new WorkTime(workTime);

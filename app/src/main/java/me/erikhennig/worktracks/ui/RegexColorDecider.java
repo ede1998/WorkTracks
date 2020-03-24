@@ -2,6 +2,7 @@ package me.erikhennig.worktracks.ui;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class RegexColorDecider implements TextWatcher {
+
+    private static final String TAG = RegexColorDecider.class.getName();
 
     private TextView element;
     private List<PatternForColor> regexToColor;
@@ -20,9 +23,17 @@ public class RegexColorDecider implements TextWatcher {
     }
 
     private void updateColor(String newText) {
+        Log.d(TAG, String.format("Checking if color must be updated for text [%s]", newText));
         Optional<PatternForColor> matchedPattern = this.regexToColor.stream().filter(x -> x.matches(newText)).findFirst();
 
-        matchedPattern.ifPresent(patternForColor -> this.element.setTextColor(patternForColor.getColor()));
+        if (matchedPattern.isPresent()) {
+            PatternForColor pattern = matchedPattern.get();
+            Log.d(TAG, String.format("Pattern [%s] matched. Setting new color [%s].", pattern.pattern, pattern.color));
+            this.element.setTextColor(pattern.getColor());
+        }
+        else{
+            Log.d(TAG, "No pattern matched to change the color.");
+        }
     }
 
     @Override

@@ -54,7 +54,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         workTimeViewModel = new ViewModelProvider(requireActivity()).get(WorkTimeViewModel.class);
 
         view.<CalendarView>findViewById(R.id.calendar).setOnDateChangeListener((clickedView, year, zeroBasedMonth, day) -> {
-            this.loadWorkTime(LocalDate.of(year, zeroBasedMonth + 1, day));
+            LocalDate selectedDate = LocalDate.of(year, zeroBasedMonth + 1, day);
+            Log.i(TAG, String.format("Changed date to [%s]. Updating UI.", selectedDate));
+            this.loadWorkTime(selectedDate);
             this.updateInputFields();
             this.updateTextViews();
         });
@@ -83,8 +85,11 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
     @Override
     public void onFocusChange(View view, boolean hasFocus) {
-        EditText text = (EditText) view;
+        if (hasFocus) return;
 
+        Log.d(TAG, "Input field lost focus. Checking contents and updating time status information.");
+
+        EditText text = (EditText) view;
 
         switch (text.getId()) {
             case R.id.break_duration:
@@ -130,31 +135,39 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     }
 
     private void trySaveInput() {
-        View view = requireView();
+        Log.i(TAG, "Trying to save input to database.");
+        View view = this.requireView();
 
         boolean ignoreDay = view.<Switch>findViewById(R.id.ignoreDay).isChecked();
+        String comment = view.<EditText>findViewById(R.id.comment).getText().toString();
         this.workTime.setIgnore(ignoreDay);
+        this.workTime.setComment(comment);
 
         if (!this.workTime.validate()) {
+            Log.e(TAG, String.format("Invalid work time [%s].", this.workTime));
             return;
         }
 
         this.workTimeViewModel.insertOrUpdate(this.workTime);
 
+        Log.i(TAG, String.format("Successfully saved work time [%s]", this.workTime));
+
         this.navigateToTable();
     }
 
     private void updateInputFields() {
-        View view = requireView();
+        View view = this.requireView();
 
         String startingTime = format(this.workTime.getStartingTime(), ChronoFormatter::formatTime);
         String endingTime = format(this.workTime.getEndingTime(), ChronoFormatter::formatTime);
         String duration = format(this.workTime.getBreakDuration(), ChronoFormatter::formatDuration);
         boolean ignore = this.workTime.getIgnore();
+        String comment = this.workTime.getComment();
 
         view.<EditText>findViewById(R.id.start).setText(startingTime);
         view.<EditText>findViewById(R.id.end).setText(endingTime);
         view.<EditText>findViewById(R.id.break_duration).setText(duration);
+        view.<EditText>findViewById(R.id.comment).setText(comment);
         view.<Switch>findViewById(R.id.ignoreDay).setChecked(ignore);
     }
 
@@ -165,7 +178,8 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     }
 
     private void updateTextViews() {
-        View view = requireView();
+        Log.d(TAG, "Updating time status information text views.");
+        View view = this.requireView();
 
         String durationString = this.getString(R.string.unknown_duration);
         String differenceString = this.getString(R.string.unknown_difference);
@@ -187,6 +201,7 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     }
 
     private void navigateToTable() {
+        Log.i(TAG, "Returning to time table fragment.");
         NavHostFragment.findNavController(AddOrEditEntryFragment.this).navigate(R.id.action_back_to_table);
     }
 
@@ -194,6 +209,10 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     public void onToggleSoftKeyboard(boolean isVisible) {
         Log.i(TAG, String.format("onKeyboardShowHide(%s) called.", isVisible));
         int visibility = isVisible ? View.GONE : View.VISIBLE;
-        this.requireView().findViewById(R.id.calendar).setVisibility(visibility);
+        View root = this.getView();
+
+        if (root == null) return;
+
+        root.findViewById(R.id.calendar).setVisibility(visibility);
     }
 }
