@@ -22,9 +22,7 @@
                 android:id="@+id/linear_layout_row1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
                 android:orientation="horizontal"
-                card_view:layout_constraintBottom_toTopOf="@+id/linear_layout_row2"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/barrier"
                 card_view:layout_constraintTop_toTopOf="parent">
@@ -55,83 +53,6 @@
                     android:text="00:00"
                     android:textColor="@android:color/primary_text_light"
                     android:textSize="24sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_layout_row2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toStartOf="@+id/linear_layout_row1"
-                card_view:layout_constraintTop_toBottomOf="@+id/linear_layout_row1">
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/text_sigma"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:textColor="@android:color/primary_text_light"
-                    android:text="Σ" />
-
-                <TextView
-                    android:id="@+id/text_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/primary_text_light"
-                    android:text="00:00" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/text_delta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:textColor="@android:color/primary_text_light"
-                    android:text="Δ" />
-
-                <TextView
-                    android:id="@+id/text_difference"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/primary_text_light"
-                    android:text="-00:00" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/text_sigma_delta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:textColor="@android:color/primary_text_light"
-                    android:text="ΣΔ" />
-
-                <TextView
-                    android:id="@+id/text_accumulated_difference"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/primary_text_light"
-                    android:text="-00:00" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
             </LinearLayout>
 
             <TextView
@@ -171,6 +92,15 @@
                 card_view:barrierDirection="end"
                 card_view:constraint_referenced_ids="text_week_day,text_date"
                 tools:layout_editor_absoluteX="382dp" />
+
+            <include
+                layout="@layout/time_status_information"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/barrier"
+                card_view:layout_constraintTop_toBottomOf="@+id/linear_layout_row1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
