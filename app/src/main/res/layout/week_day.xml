@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <!-- A CardView that contains a TextView -->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_week_day"
         android:layout_width="match_parent"
@@ -24,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/barrier"
+                card_view:layout_constraintStart_toStartOf="@+id/guideline"
                 card_view:layout_constraintTop_toTopOf="parent">
 
                 <Space
@@ -69,29 +68,23 @@
 
             <TextView
                 android:id="@+id/text_week_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
                 android:autoSizeTextType="uniform"
                 android:background="@drawable/circle"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:padding="8sp"
-                android:text="Mo"
+                android:text="NA"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 card_view:layout_constraintBottom_toTopOf="@+id/text_date"
+                card_view:layout_constraintDimensionRatio="1.00"
+                card_view:layout_constraintEnd_toStartOf="@+id/guideline"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                card_view:barrierDirection="end"
-                card_view:constraint_referenced_ids="text_week_day,text_date"
-                tools:layout_editor_absoluteX="382dp" />
 
             <include
                 layout="@layout/time_status_information"
@@ -99,8 +92,15 @@
                 android:layout_height="wrap_content"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/barrier"
+                card_view:layout_constraintStart_toStartOf="@+id/guideline"
                 card_view:layout_constraintTop_toBottomOf="@+id/linear_layout_row1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                card_view:layout_constraintGuide_begin="62dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
