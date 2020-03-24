@@ -1,17 +1,14 @@
 <resources>
     <string name="app_name">WorkTracks</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="save">Save</string>
     <string name="vacation_sick_leave">Vacation/Sick leave</string>
-    <string name="duration">Duration</string>
-    <string name="accumulated_difference">Accumulated difference</string>
-    <string name="difference">Difference</string>
+    <string name="comment">Comment</string>
+    <string name="duration">Σ</string>
+    <string name="difference">Δ</string>
+    <string name="unknown_difference">-00:00</string>
+    <string name="unknown_duration">00:00</string>
+    <string name="accumulated_difference">ΣΔ</string>
+    <string name="cancel">Cancel</string>
 </resources>

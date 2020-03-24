@@ -62,11 +62,13 @@ public class TimeTableFragment extends Fragment {
         picker.updateDate(dayOfCurrentWeek.getYear(), dayOfCurrentWeek.getMonthValue() - 1, dayOfCurrentWeek.getDayOfMonth());
         picker.setOnDateSetListener((clickedView, year, zeroBasedMonth, day) -> this.workWeekViewModel.setWeek(Week.of(LocalDate.of(year, zeroBasedMonth + 1, day))));
         picker.show();
-    };
+    }
+
+    ;
 
     private List<View> getAllElements(int elementId) {
         final ViewGroup allWeekTimes = this.requireView().findViewById(R.id.linear_layout_all_week_times);
-        final ArrayList<View> elements  = new ArrayList<>();
+        final ArrayList<View> elements = new ArrayList<>();
 
         for (int i = 0; i < allWeekTimes.getChildCount(); ++i) {
             elements.add(allWeekTimes.getChildAt(i).findViewById(elementId));
@@ -91,7 +93,7 @@ public class TimeTableFragment extends Fragment {
                 .collect(Collectors.toList());
 
         int i = 0;
-        for(View card: this.getAllElements(R.id.card_view_week_day)){
+        for (View card : this.getAllElements(R.id.card_view_week_day)) {
             this.updateCard(card, timesInWeekWithoutGap.get(i++));
         }
     }

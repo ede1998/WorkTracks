@@ -8,18 +8,23 @@
 
     <Button
         android:id="@+id/cancel"
-        android:layout_width="204dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@android:string/cancel"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/save" />
+        app:layout_constraintStart_toEndOf="@+id/save"
+        app:layout_constraintTop_toTopOf="@+id/save" />
 
     <Button
         android:id="@+id/save"
-        android:layout_width="204dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cancel"
@@ -31,10 +36,6 @@
         android:id="@+id/calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,82 +44,150 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/cancel"
+        app:layout_constraintBottom_toTopOf="@+id/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendar">
 
         <EditText
             android:id="@+id/end"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="time"
-            app:layout_constraintStart_toStartOf="@+id/start"
-            app:layout_constraintTop_toBottomOf="@+id/start" />
+            app:layout_constraintBottom_toBottomOf="@+id/start"
+            app:layout_constraintEnd_toStartOf="@+id/break_duration"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/start"
+            app:layout_constraintTop_toTopOf="@+id/start" />
 
         <EditText
             android:id="@+id/break_duration"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="time"
-            app:layout_constraintStart_toStartOf="@+id/end"
-            app:layout_constraintTop_toBottomOf="@id/end" />
+            app:layout_constraintBottom_toBottomOf="@+id/end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/end"
+            app:layout_constraintTop_toTopOf="@+id/end" />
 
         <EditText
             android:id="@+id/start"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
             android:inputType="time"
-            app:layout_constraintBottom_toTopOf="@+id/end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ignoreDay" />
-
-        <Switch
-            android:id="@+id/ignoreDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/vacation_sick_leave"
-            app:layout_constraintBottom_toTopOf="@+id/start"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/end"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/duration"
-            android:textColor="@color/colorNeutral"
-            app:layout_constraintBottom_toBottomOf="@+id/start"
+        <EditText
+            android:id="@+id/comment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/comment"
+            android:inputType="textMultiLine"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/start"
-            app:layout_constraintTop_toTopOf="@+id/start" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ignoreDay" />
 
-        <TextView
-            android:id="@+id/accumulated_difference"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_layout_row2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/accumulated_difference"
-            android:textColor="@color/colorNeutral"
-            app:layout_constraintBottom_toBottomOf="@+id/break_duration"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/ignoreDay"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/break_duration"
-            app:layout_constraintTop_toTopOf="@+id/break_duration" />
+            app:layout_constraintStart_toEndOf="@+id/ignoreDay"
+            app:layout_constraintTop_toTopOf="@+id/ignoreDay">
 
-        <TextView
-            android:id="@+id/difference"
-            android:layout_width="wrap_content"
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/text_sigma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="@string/duration"
+                android:textColor="@android:color/primary_text_light" />
+
+            <TextView
+                android:id="@+id/text_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unknown_duration"
+                android:textColor="@android:color/primary_text_light" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/text_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="@string/difference"
+                android:textColor="@android:color/primary_text_light" />
+
+            <TextView
+                android:id="@+id/text_difference"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unknown_difference"
+                android:textColor="@android:color/primary_text_light" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/text_sigma_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="@string/accumulated_difference"
+                android:textColor="@android:color/primary_text_light" />
+
+            <TextView
+                android:id="@+id/text_accumulated_difference"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unknown_duration"
+                android:textColor="@android:color/primary_text_light" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/ignoreDay"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/difference"
-            android:textColor="@color/colorNeutral"
-            app:layout_constraintBottom_toBottomOf="@+id/end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/end"
-            app:layout_constraintTop_toTopOf="@+id/end" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/vacation_sick_leave"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

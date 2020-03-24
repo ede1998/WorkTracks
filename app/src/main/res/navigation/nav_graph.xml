@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/TimeTableFragment"
         android:name="me.erikhennig.worktracks.ui.TimeTableFragment"
-        android:label="@string/first_fragment_label"
         tools:layout="@layout/time_table_fragment">
 
         <action
@@ -18,7 +17,6 @@
     <fragment
         android:id="@+id/AddOrEditEntryFragment"
         android:name="me.erikhennig.worktracks.ui.AddOrEditEntryFragment"
-        android:label="@string/second_fragment_label"
         tools:layout="@layout/add_or_edit_entry_fragment">
 
         <action

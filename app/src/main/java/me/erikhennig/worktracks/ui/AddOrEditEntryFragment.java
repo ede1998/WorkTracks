@@ -1,9 +1,15 @@
 package me.erikhennig.worktracks.ui;
 
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -16,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.rw.keyboardlistener.KeyboardUtils;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -29,7 +36,8 @@ import me.erikhennig.worktracks.model.ChronoFormatter;
 import me.erikhennig.worktracks.model.WorkTime;
 import me.erikhennig.worktracks.viewmodel.WorkTimeViewModel;
 
-public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChangeListener {
+public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChangeListener, KeyboardUtils.SoftKeyboardToggleListener {
+    private static final String TAG = AddOrEditEntryFragment.class.getName();
 
     private WorkTimeViewModel workTimeViewModel;
     private WorkTime workTime;
@@ -58,8 +66,10 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         view.<EditText>findViewById(R.id.end).setOnFocusChangeListener(this);
         view.<EditText>findViewById(R.id.break_duration).setOnFocusChangeListener(this);
 
-        RegexColorDeciderFactory.registerDurationPositiveNegativeDecider(view.findViewById(R.id.difference));
-        RegexColorDeciderFactory.registerDurationPositiveNegativeDecider(view.findViewById(R.id.accumulated_difference));
+        KeyboardUtils.addKeyboardToggleListener(this.requireActivity(), this);
+
+        RegexColorDeciderFactory.registerDurationPositiveNegativeDecider(view.findViewById(R.id.text_difference));
+        RegexColorDeciderFactory.registerDurationPositiveNegativeDecider(view.findViewById(R.id.text_accumulated_difference));
 
         this.loadWorkTime(LocalDate.now());
         this.updateInputFields();
@@ -73,8 +83,6 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
     @Override
     public void onFocusChange(View view, boolean hasFocus) {
-        if (hasFocus) return;
-
         EditText text = (EditText) view;
 
 
@@ -150,8 +158,7 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         view.<Switch>findViewById(R.id.ignoreDay).setChecked(ignore);
     }
 
-    private static <T> String format(T value, Function<T, String> formatter)
-    {
+    private static <T> String format(T value, Function<T, String> formatter) {
         if (value == null)
             return "";
         return formatter.apply(value);
@@ -160,9 +167,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     private void updateTextViews() {
         View view = requireView();
 
-        String durationString = this.getString(R.string.duration);
-        String differenceString = this.getString(R.string.difference);
-        String accumulatedDifferenceString = this.getString(R.string.accumulated_difference);
+        String durationString = this.getString(R.string.unknown_duration);
+        String differenceString = this.getString(R.string.unknown_difference);
+        String accumulatedDifferenceString = this.getString(R.string.unknown_difference);
 
         Duration duration = this.workTime.getWorkingDuration();
         if (duration != null) {
@@ -174,12 +181,19 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
             differenceString = ChronoFormatter.formatDuration(difference);
         }
 
-        view.<TextView>findViewById(R.id.duration).setText(durationString);
-        view.<TextView>findViewById(R.id.difference).setText(differenceString);
-        view.<TextView>findViewById(R.id.accumulated_difference).setText(accumulatedDifferenceString);
+        view.<TextView>findViewById(R.id.text_duration).setText(durationString);
+        view.<TextView>findViewById(R.id.text_difference).setText(differenceString);
+        view.<TextView>findViewById(R.id.text_accumulated_difference).setText(accumulatedDifferenceString);
     }
 
     private void navigateToTable() {
         NavHostFragment.findNavController(AddOrEditEntryFragment.this).navigate(R.id.action_back_to_table);
+    }
+
+    @Override
+    public void onToggleSoftKeyboard(boolean isVisible) {
+        Log.i(TAG, String.format("onKeyboardShowHide(%s) called.", isVisible));
+        int visibility = isVisible ? View.GONE : View.VISIBLE;
+        this.requireView().findViewById(R.id.calendar).setVisibility(visibility);
     }
 }
