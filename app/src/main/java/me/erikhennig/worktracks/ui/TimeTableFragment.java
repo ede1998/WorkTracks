@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -139,6 +140,7 @@ public class TimeTableFragment extends Fragment {
         String startTillEnd = String.format(Locale.getDefault(), "%s - %s", start, end);
         String breakDuration = ChronoFormatter.formatDuration(wt.getBreakDuration());
         String duration = ChronoFormatter.formatDuration(wt.getWorkingDuration());
+        String comment = workTime.getComment();
 
         // TODO extract as parameter
         final Duration workingDuration = wt.getWorkingDuration();
@@ -153,5 +155,19 @@ public class TimeTableFragment extends Fragment {
         card.<TextView>findViewById(R.id.text_duration).setText(duration);
         card.<TextView>findViewById(R.id.text_difference).setText(difference);
         card.<TextView>findViewById(R.id.text_accumulated_difference).setText("not impl");
+
+        int cardColor = wt.getIgnore() ?
+                ContextCompat.getColor(card.getContext(), R.color.colorDisabled) :
+                ContextCompat.getColor(card.getContext(), R.color.design_default_color_background);
+
+        card.setBackgroundColor(cardColor);
+
+        TextView commentView = card.findViewById(R.id.text_comment);
+        if (comment != null && !comment.equals("")) {
+            commentView.setText(comment);
+            commentView.setVisibility(View.VISIBLE);
+        } else {
+            commentView.setVisibility(View.GONE);
+        }
     }
 }
