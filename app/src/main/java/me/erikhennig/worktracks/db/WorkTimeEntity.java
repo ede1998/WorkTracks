@@ -54,6 +54,12 @@ public class WorkTimeEntity implements IWorkTime {
         this.comment = workTime.getComment();
     }
 
+    @Ignore
+    public WorkTimeEntity(int id, @NonNull IWorkTime workTime) {
+        this(workTime);
+        this.id = id;
+    }
+
     @Override
     public int getId() {
         return this.id;

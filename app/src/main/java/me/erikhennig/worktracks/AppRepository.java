@@ -74,9 +74,9 @@ public class AppRepository {
         });
     }
 
-    public void update(@NonNull IWorkTime workTime) {
+    public void update(int id, @NonNull IWorkTime workTime) {
         AppDatabase.databaseExecutor.execute(() -> {
-            WorkTimeEntity entity = new WorkTimeEntity(workTime);
+            WorkTimeEntity entity = new WorkTimeEntity(id, workTime);
             this.database.workTimeDao().update(entity);
         });
     }

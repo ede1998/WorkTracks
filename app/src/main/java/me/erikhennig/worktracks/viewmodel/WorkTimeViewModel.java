@@ -40,7 +40,7 @@ public class WorkTimeViewModel extends AndroidViewModel {
         IWorkTime wt = this.repository.getWorkTime(workTime.getDate());
         if (wt != null)
         {
-            this.repository.update(workTime);
+            this.repository.update(wt.getId(), workTime);
         }
         else
         {
