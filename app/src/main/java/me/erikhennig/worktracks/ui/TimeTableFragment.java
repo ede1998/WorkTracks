@@ -28,6 +28,7 @@ import me.erikhennig.worktracks.model.ChronoFormatter;
 import me.erikhennig.worktracks.model.IWorkTime;
 import me.erikhennig.worktracks.model.Week;
 import me.erikhennig.worktracks.model.WorkTime;
+import me.erikhennig.worktracks.model.WorkTimeWithTimeStatus;
 import me.erikhennig.worktracks.viewmodel.WorkWeekViewModel;
 
 public class TimeTableFragment extends Fragment {
@@ -88,13 +89,13 @@ public class TimeTableFragment extends Fragment {
         NavHostFragment.findNavController(TimeTableFragment.this).navigate(R.id.action_to_add_or_edit);
     }
 
-    private void updateTimeTable(List<IWorkTime> timesInWeek) {
+    private void updateTimeTable(List<WorkTimeWithTimeStatus> timesInWeek) {
         Log.i(TAG, "Updating fragment");
         View view = this.requireView();
 
         this.updateHeader(view);
 
-        List<IWorkTime> timesInWeekWithoutGap = this.workWeekViewModel.getWeek().getDates().stream()
+        List<WorkTimeWithTimeStatus> timesInWeekWithoutGap = this.workWeekViewModel.getWeek().getDates().stream()
                 .map(d -> timesInWeek.stream()
                         .filter(wt -> wt.getDate().isEqual(d))
                         .findFirst()
@@ -122,8 +123,8 @@ public class TimeTableFragment extends Fragment {
         weekEnd.setText(ChronoFormatter.formatDate(lastDay));
     }
 
-    private void updateCard(View card, IWorkTime workTime) {
-        if (workTime == null) {
+    private void updateCard(View card, WorkTimeWithTimeStatus wt) {
+        if (wt == null) {
             Log.i(TAG, String.format("Setting visibility of card [%s] to GONE", card.getId()));
             card.setVisibility(View.GONE);
             return;
@@ -131,22 +132,17 @@ public class TimeTableFragment extends Fragment {
         Log.i(TAG, String.format("Making card [%s] VISIBLE and updating it.", card.getId()));
         card.setVisibility(View.VISIBLE);
 
-        WorkTime wt = new WorkTime(workTime);
-
         String weekDay = ChronoFormatter.formatDayOfWeek(wt.getDate().getDayOfWeek());
         String date = ChronoFormatter.formatDate(wt.getDate());
         String start = ChronoFormatter.formatTime(wt.getStartingTime());
         String end = ChronoFormatter.formatTime(wt.getEndingTime());
         String startTillEnd = String.format(Locale.getDefault(), "%s - %s", start, end);
         String breakDuration = ChronoFormatter.formatDuration(wt.getBreakDuration());
-        String duration = ChronoFormatter.formatDuration(wt.getWorkingDuration());
-        String comment = workTime.getComment();
+        String comment = wt.getComment();
 
-        // TODO extract as parameter
-        final Duration workingDuration = wt.getWorkingDuration();
-        final Duration expectedDuration = Duration.ofHours(7).plusMinutes(24);
-        final Duration differenceDuration = workingDuration.minus(expectedDuration);
-        String difference = ChronoFormatter.formatDuration(differenceDuration);
+        String duration = ChronoFormatter.formatDuration(wt.getWorkingDuration());
+        String difference = ChronoFormatter.formatDuration(wt.getDifference());
+        String accumulatedDifference = ChronoFormatter.formatDuration(wt.getAccumulatedDifference());
 
         card.<TextView>findViewById(R.id.text_date).setText(date);
         card.<TextView>findViewById(R.id.text_week_day).setText(weekDay);
@@ -154,7 +150,7 @@ public class TimeTableFragment extends Fragment {
         card.<TextView>findViewById(R.id.text_break).setText(breakDuration);
         card.<TextView>findViewById(R.id.text_duration).setText(duration);
         card.<TextView>findViewById(R.id.text_difference).setText(difference);
-        card.<TextView>findViewById(R.id.text_accumulated_difference).setText("not impl");
+        card.<TextView>findViewById(R.id.text_accumulated_difference).setText(accumulatedDifference);
 
         int cardColor = wt.getIgnore() ?
                 ContextCompat.getColor(card.getContext(), R.color.colorDisabled) :

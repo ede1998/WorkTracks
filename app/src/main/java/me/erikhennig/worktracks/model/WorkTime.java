@@ -3,33 +3,20 @@ package me.erikhennig.worktracks.model;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Locale;
 
-public class WorkTime implements IWorkTime {
-    private int id;
-    private LocalDate date;
-    private boolean ignore;
-    private LocalTime startingTime;
-    private LocalTime endingTime;
-    private Duration breakDuration;
-    private String comment;
+public class WorkTime extends ReadOnlyWorkTime {
 
     public WorkTime() {
-
+        super();
     }
 
     public WorkTime(LocalDate date) {
+        super();
         this.date = date;
     }
 
     public WorkTime(LocalDate date, boolean ignore, LocalTime startingTime, LocalTime endingTime, Duration breakDuration, String comment) {
-        this.id = -1;
-        this.date = date;
-        this.ignore = ignore;
-        this.startingTime = startingTime;
-        this.endingTime = endingTime;
-        this.breakDuration = breakDuration;
-        this.comment = comment;
+        super(date,ignore,startingTime,endingTime,breakDuration,comment);
     }
 
     public WorkTime(IWorkTime workTime) {
@@ -40,69 +27,6 @@ public class WorkTime implements IWorkTime {
         this.endingTime = workTime.getEndingTime();
         this.breakDuration = workTime.getBreakDuration();
         this.comment = workTime.getComment();
-    }
-
-    public boolean validate() {
-        return this.date != null && this.startingTime != null && this.endingTime != null && this.breakDuration != null;
-    }
-
-    public Duration getWorkingDuration() {
-        if (this.startingTime == null || this.endingTime == null || this.breakDuration == null) {
-            return null;
-        }
-        Duration totalDuration = Duration.between(this.startingTime, this.endingTime);
-        Duration withBreak = totalDuration.minus(this.breakDuration);
-
-        return withBreak;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(Locale.getDefault(),
-                "WorkTime(Id: [%d], Date: [%s], Ignore: [%s], Start: [%s], End: [%s], Break: [%s], Comment: [%s])",
-                this.id,
-                this.date,
-                this.ignore,
-                this.startingTime,
-                this.endingTime,
-                this.breakDuration,
-                this.comment
-        );
-    }
-
-    @Override
-    public int getId() {
-        return this.id;
-    }
-
-    @Override
-    public LocalDate getDate() {
-        return this.date;
-    }
-
-    @Override
-    public boolean getIgnore() {
-        return this.ignore;
-    }
-
-    @Override
-    public LocalTime getStartingTime() {
-        return this.startingTime;
-    }
-
-    @Override
-    public LocalTime getEndingTime() {
-        return this.endingTime;
-    }
-
-    @Override
-    public Duration getBreakDuration() {
-        return this.breakDuration;
-    }
-
-    @Override
-    public String getComment() {
-        return this.comment;
     }
 
     public void setId(int id) {

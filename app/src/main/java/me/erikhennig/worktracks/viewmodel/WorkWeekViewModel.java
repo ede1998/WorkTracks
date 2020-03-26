@@ -1,14 +1,12 @@
 package me.erikhennig.worktracks.viewmodel;
 
 import android.app.Application;
+import android.media.ImageWriter;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 
 import java.util.List;
 
@@ -16,14 +14,15 @@ import me.erikhennig.worktracks.AppRepository;
 import me.erikhennig.worktracks.WorkTracksApp;
 import me.erikhennig.worktracks.model.IWorkTime;
 import me.erikhennig.worktracks.model.Week;
+import me.erikhennig.worktracks.model.WorkTimeWithTimeStatus;
 
 public class WorkWeekViewModel extends AndroidViewModel {
 
     private final AppRepository repository;
-    private final MediatorLiveData<List<IWorkTime>> data = new MediatorLiveData<>();
+    private final MediatorLiveData<List<WorkTimeWithTimeStatus>> data = new MediatorLiveData<>();
 
     private Week week;
-    private LiveData<List<IWorkTime>> t;
+    private LiveData<List<IWorkTime>> workTimes;
 
     public WorkWeekViewModel(@NonNull Application application) {
         super(application);
@@ -32,7 +31,7 @@ public class WorkWeekViewModel extends AndroidViewModel {
         this.setWeek(Week.now());
     }
 
-    public LiveData<List<IWorkTime>> getWorkTimes() {
+    public LiveData<List<WorkTimeWithTimeStatus>> getWorkTimes() {
         return this.data;
     }
 
@@ -46,12 +45,17 @@ public class WorkWeekViewModel extends AndroidViewModel {
 
     public void setWeek(Week week) {
         this.week = week;
-        if (this.t != null) {
-            this.data.removeSource(this.t);
+        if (this.workTimes != null) {
+            this.data.removeSource(this.workTimes);
         }
-        this.t = this.repository.getWorkTimes(week);
-        List<IWorkTime> l = this.t.getValue();
-        this.data.addSource(this.t, this.data::setValue);
+        this.workTimes = this.repository.getWorkTimes(week);
+
+        this.data.addSource(this.workTimes, this::updateData);
+    }
+
+    private void updateData(List<IWorkTime> workTimes) {
+        List<WorkTimeWithTimeStatus> list = WorkTimeWithTimeStatus.create(workTimes);
+        this.data.setValue(list);
     }
 
     public Week getWeek() {

@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import me.erikhennig.worktracks.R;
 import me.erikhennig.worktracks.model.IWorkTime;
@@ -135,8 +136,13 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     }
 
     private void trySaveInput() {
-        Log.i(TAG, "Trying to save input to database.");
         View view = this.requireView();
+
+        Stream.of(R.id.start, R.id.end, R.id.break_duration)
+                .map(view::<EditText>findViewById)
+                .forEach(x -> this.onFocusChange(x, false));
+
+        Log.i(TAG, "Trying to save input to database.");
 
         boolean ignoreDay = view.<Switch>findViewById(R.id.ignoreDay).isChecked();
         String comment = view.<EditText>findViewById(R.id.comment).getText().toString();
