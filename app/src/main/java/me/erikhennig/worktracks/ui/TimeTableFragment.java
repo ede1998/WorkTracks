@@ -16,7 +16,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +24,7 @@ import java.util.stream.Collectors;
 
 import me.erikhennig.worktracks.R;
 import me.erikhennig.worktracks.model.ChronoFormatter;
-import me.erikhennig.worktracks.model.IWorkTime;
 import me.erikhennig.worktracks.model.Week;
-import me.erikhennig.worktracks.model.WorkTime;
 import me.erikhennig.worktracks.model.WorkTimeWithTimeStatus;
 import me.erikhennig.worktracks.viewmodel.WorkWeekViewModel;
 
@@ -55,13 +52,23 @@ public class TimeTableFragment extends Fragment {
         view.<FloatingActionButton>findViewById(R.id.addOrEdit).setOnClickListener(clickedView -> this.navigateToAddOrEdit());
         view.findViewById(R.id.button_next_week).setOnClickListener(clickedView -> this.workWeekViewModel.increaseWeek());
         view.findViewById(R.id.button_previous_week).setOnClickListener(clickedView -> this.workWeekViewModel.decreaseWeek());
-        view.findViewById(R.id.text_current_week).setOnClickListener(clickedView -> this.onWeekClick());
+        view.findViewById(R.id.text_current_week).setOnClickListener(clickedView -> this.gotoCurrentWeek());
+        view.findViewById(R.id.text_current_week).setOnLongClickListener(clickedView -> {
+            this.selectWeek();
+            return true;
+        });
 
         this.getAllElements(R.id.text_difference).forEach(x -> RegexColorDeciderFactory.registerDurationPositiveNegativeDecider((TextView) x));
         this.getAllElements(R.id.text_accumulated_difference).forEach(x -> RegexColorDeciderFactory.registerDurationPositiveNegativeDecider((TextView) x));
     }
 
-    private void onWeekClick() {
+    private void gotoCurrentWeek() {
+        Log.i(TAG, "Changing overview back to current week");
+        Week week = Week.now();
+        this.workWeekViewModel.setWeek(week);
+    }
+
+    private void selectWeek() {
         Log.i(TAG, "Opening week selection pop up.");
         DatePickerDialog picker = new DatePickerDialog(this.requireContext());
         LocalDate dayOfCurrentWeek = this.workWeekViewModel.getWeek().getFirstDayOfWeek();
