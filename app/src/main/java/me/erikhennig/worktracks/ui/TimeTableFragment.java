@@ -140,7 +140,7 @@ public class TimeTableFragment extends Fragment {
         String breakDuration = ChronoFormatter.formatDuration(wt.getBreakDuration());
         String comment = wt.getComment();
 
-        String duration = ChronoFormatter.formatDuration(wt.getWorkingDuration());
+        String duration = ChronoFormatter.formatDuration(wt.getDuration());
         String difference = ChronoFormatter.formatDuration(wt.getDifference());
         String accumulatedDifference = ChronoFormatter.formatDuration(wt.getAccumulatedDifference());
 

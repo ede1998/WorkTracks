@@ -1,5 +1,7 @@
 package me.erikhennig.worktracks.model;
 
+import androidx.annotation.NonNull;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,12 +40,8 @@ class ReadOnlyWorkTime implements IWorkTime {
 
     }
 
-    public boolean validate() {
-        return this.date != null && this.startingTime != null && this.endingTime != null && this.breakDuration != null;
-    }
-
     public Duration getWorkingDuration() {
-        if (!this.validate()) {
+        if (WorkTimeValidator.validate(this)) {
             return null;
         }
         Duration totalDuration = Duration.between(this.startingTime, this.endingTime);
@@ -52,6 +50,7 @@ class ReadOnlyWorkTime implements IWorkTime {
         return withBreak;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format(Locale.getDefault(),
