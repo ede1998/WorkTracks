@@ -26,6 +26,7 @@
             android:layout_weight="10"
             android:background="@drawable/round_corner"
             android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="@string/previous_week"
             android:src="@android:drawable/ic_media_rew" />
 
         <TextView
@@ -66,6 +67,7 @@
             android:layout_weight="10"
             android:background="@drawable/round_corner"
             android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="@string/next_week"
             android:longClickable="false"
             android:src="@android:drawable/ic_media_ff" />
     </LinearLayout>
