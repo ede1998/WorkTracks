@@ -1,4 +1,4 @@
-package me.erikhennig.worktracks.ui;
+package me.erikhennig.worktracks.ui.colordecider;
 
 import android.text.Editable;
 import android.text.TextWatcher;

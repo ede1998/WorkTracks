@@ -1,11 +1,11 @@
-package me.erikhennig.worktracks.ui;
+package me.erikhennig.worktracks.ui.colordecider;
 
 import android.content.Context;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.erikhennig.worktracks.R;
@@ -17,12 +17,11 @@ public class RegexColorDeciderFactory {
         final int negativeColor = ContextCompat.getColor(colorContext, R.color.colorNegative);
         final int neutralColor = ContextCompat.getColor(colorContext, R.color.colorNeutral);
 
-        return new ArrayList<RegexColorDecider.PatternForColor>() {{
-            add(new RegexColorDecider.PatternForColor("^0?0:0?0$", neutralColor));
-            add(new RegexColorDecider.PatternForColor("^-\\d?\\d:\\d?\\d$", negativeColor));
-            add(new RegexColorDecider.PatternForColor("^\\d?\\d:\\d?\\d$", positiveColor));
-            add(new RegexColorDecider.PatternForColor("^.*$", neutralColor));
-        }};
+        return Arrays.asList(
+                new RegexColorDecider.PatternForColor("^-?0?0:0?0$", neutralColor),
+                new RegexColorDecider.PatternForColor("^-\\d?\\d:\\d?\\d$", negativeColor),
+                new RegexColorDecider.PatternForColor("^\\d?\\d:\\d?\\d$", positiveColor),
+                new RegexColorDecider.PatternForColor("^.*$", neutralColor));
     }
 
     public static void registerDurationPositiveNegativeDecider(TextView view) {

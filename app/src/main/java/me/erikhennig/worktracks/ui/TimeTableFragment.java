@@ -26,6 +26,7 @@ import me.erikhennig.worktracks.R;
 import me.erikhennig.worktracks.model.ChronoFormatter;
 import me.erikhennig.worktracks.model.Week;
 import me.erikhennig.worktracks.model.WorkTimeWithTimeStatus;
+import me.erikhennig.worktracks.ui.colordecider.RegexColorDeciderFactory;
 import me.erikhennig.worktracks.viewmodel.WorkWeekViewModel;
 
 public class TimeTableFragment extends Fragment {

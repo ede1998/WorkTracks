@@ -30,6 +30,7 @@ import me.erikhennig.worktracks.R;
 import me.erikhennig.worktracks.model.ChronoFormatter;
 import me.erikhennig.worktracks.model.IWorkTime;
 import me.erikhennig.worktracks.model.WorkTimeValidator;
+import me.erikhennig.worktracks.ui.colordecider.RegexColorDeciderFactory;
 import me.erikhennig.worktracks.viewmodel.WorkDayViewModel;
 
 public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChangeListener, KeyboardUtils.SoftKeyboardToggleListener {
