@@ -99,6 +99,8 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
     private <T> T parse(String text, Function<String, T> parser, String fieldHint) {
         try {
+            if (text.isEmpty())
+                return null;
             return parser.apply(text);
         } catch (DateTimeParseException e) {
             String errorMessage = "Input '" + e.getParsedString() + "' in field " + fieldHint + " could not be parsed.";
