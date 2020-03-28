@@ -37,6 +37,7 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     private static final String TAG = AddOrEditEntryFragment.class.getName();
 
     private WorkDayViewModel workDayViewModel;
+    private KeyboardToggleFocusSaver focusSaver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         super.onViewCreated(view, savedInstanceState);
 
         workDayViewModel = new ViewModelProvider(requireActivity()).get(WorkDayViewModel.class);
+        focusSaver = new KeyboardToggleFocusSaver();
 
         view.<CalendarView>findViewById(R.id.calendar).setOnDateChangeListener((clickedView, year, zeroBasedMonth, day) -> {
             LocalDate selectedDate = LocalDate.of(year, zeroBasedMonth + 1, day);
@@ -58,9 +60,10 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         view.<Button>findViewById(R.id.cancel).setOnClickListener(clickedView -> this.navigateToTable());
         view.<Button>findViewById(R.id.save).setOnClickListener(clickedView -> this.trySaveInput());
 
-        view.<EditText>findViewById(R.id.start).setOnFocusChangeListener(this);
-        view.<EditText>findViewById(R.id.end).setOnFocusChangeListener(this);
-        view.<EditText>findViewById(R.id.break_duration).setOnFocusChangeListener(this);
+        view.findViewById(R.id.start).setOnFocusChangeListener(this);
+        view.findViewById(R.id.end).setOnFocusChangeListener(this);
+        view.findViewById(R.id.break_duration).setOnFocusChangeListener(this);
+        view.findViewById(R.id.comment).setOnFocusChangeListener(this.focusSaver);
 
         KeyboardUtils.addKeyboardToggleListener(this.requireActivity(), this);
 
@@ -75,6 +78,8 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
     @Override
     public void onFocusChange(View view, boolean hasFocus) {
+        this.focusSaver.onFocusChange(view, hasFocus);
+
         if (hasFocus) return;
 
         Log.d(TAG, "Input field lost focus. Checking contents and updating time status information.");
@@ -190,11 +195,11 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     @Override
     public void onToggleSoftKeyboard(boolean isVisible) {
         Log.i(TAG, String.format("onKeyboardShowHide(%s) called.", isVisible));
-        int visibility = isVisible ? View.GONE : View.VISIBLE;
-        View root = this.getView();
 
+        View root = this.getView();
         if (root == null) return;
 
+        int visibility = isVisible ? View.GONE : View.VISIBLE;
         root.findViewById(R.id.calendar).setVisibility(visibility);
     }
 }
