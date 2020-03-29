@@ -14,8 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +45,10 @@ public class TimeTableFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        this.workWeekViewModel = new ViewModelProvider(requireActivity()).get(WorkWeekViewModel.class);
+        this.workWeekViewModel = new ViewModelProvider(this.requireActivity()).get(WorkWeekViewModel.class);
         this.workWeekViewModel.getWorkTimes().observe(this.getViewLifecycleOwner(), this::updateTimeTable);
 
-        view.<FloatingActionButton>findViewById(R.id.addOrEdit).setOnClickListener(clickedView -> this.navigateToAddOrEdit());
+        view.findViewById(R.id.button_add_or_edit).setOnClickListener(clickedView -> this.navigateToAddOrEdit());
         view.findViewById(R.id.button_next_week).setOnClickListener(clickedView -> this.workWeekViewModel.increaseWeek());
         view.findViewById(R.id.button_previous_week).setOnClickListener(clickedView -> this.workWeekViewModel.decreaseWeek());
         view.findViewById(R.id.text_current_week).setOnClickListener(clickedView -> this.gotoCurrentWeek());

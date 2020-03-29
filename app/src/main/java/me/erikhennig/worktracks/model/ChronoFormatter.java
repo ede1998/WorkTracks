@@ -6,11 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.HashMap;
+import java.time.format.TextStyle;
 import java.util.Locale;
-import java.util.Map;
-
-import static java.time.DayOfWeek.*;
 
 public class ChronoFormatter {
 
@@ -44,23 +41,6 @@ public class ChronoFormatter {
     }
 
     public static String formatDayOfWeek(DayOfWeek dayOfWeek) {
-        switch (dayOfWeek) {
-            case MONDAY:
-                return "Mo";
-            case TUESDAY:
-                return "Di";
-            case WEDNESDAY:
-                return "Mi";
-            case THURSDAY:
-                return "Do";
-            case FRIDAY:
-                return "Fr";
-            case SATURDAY:
-                return "Sa";
-            case SUNDAY:
-                return "So";
-            default:
-                throw new IllegalStateException("Unexpected value: " + dayOfWeek);
-        }
+        return dayOfWeek.getDisplayName(TextStyle.SHORT_STANDALONE,  Locale.getDefault()).substring(0,2);
     }
 }
