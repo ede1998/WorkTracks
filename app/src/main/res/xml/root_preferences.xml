@@ -32,7 +32,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Reset">
-        <Preference app:title="MYTIT" app:key="reset"/>
+        <Preference app:title="Reset" app:key="reset"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/sync_header">
