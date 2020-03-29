@@ -1,9 +1,12 @@
-package me.erikhennig.worktracks.ui;
+package me.erikhennig.worktracks.ui.settings;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import me.erikhennig.worktracks.R;
@@ -28,6 +31,15 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
+            Preference p = this.findPreference("reset");
+            if (p != null) {
+                p.setOnPreferenceClickListener(preference -> {
+                    ResetDialogFragment dialog = new ResetDialogFragment();
+                    dialog.show(this.getParentFragmentManager(), "reset");
+                    return true;
+                });
+            }
         }
     }
 }

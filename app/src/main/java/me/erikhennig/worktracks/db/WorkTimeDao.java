@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -22,7 +23,7 @@ public interface WorkTimeDao {
     @Query("SELECT * FROM work_time WHERE date = :date")
     WorkTimeEntity getWorkTime(@NonNull LocalDate date);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(@NonNull WorkTimeEntity... workTimes);
 
     @Delete
@@ -30,4 +31,7 @@ public interface WorkTimeDao {
 
     @Update
     void update(@NonNull WorkTimeEntity workTime);
+
+    @Query("DELETE FROM work_time")
+    void deleteAll();
 }

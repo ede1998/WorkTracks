@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/messages_header">
 
@@ -15,6 +16,23 @@
             app:title="@string/reply_title"
             app:useSimpleSummaryProvider="true" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Import/Export">
+        <Preference app:title="import all">
+            <intent
+                android:targetClass="me.erikhennig.worktracks.ui.settings.ImportActivity"
+                android:targetPackage="me.erikhennig.worktracks" />
+        </Preference>
+        <Preference app:title="export all">
+            <intent
+                android:targetClass="me.erikhennig.worktracks.ui.settings.ExportActivity"
+                android:targetPackage="me.erikhennig.worktracks" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Reset">
+        <Preference app:title="MYTIT" app:key="reset"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/sync_header">

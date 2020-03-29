@@ -74,6 +74,12 @@ public class AppRepository {
         });
     }
 
+    public void deleteAll() {
+        AppDatabase.databaseExecutor.execute(() -> {
+            this.database.workTimeDao().deleteAll();
+        });
+    }
+
     public void update(int id, @NonNull IWorkTime workTime) {
         AppDatabase.databaseExecutor.execute(() -> {
             WorkTimeEntity entity = new WorkTimeEntity(id, workTime);

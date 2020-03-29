@@ -40,16 +40,6 @@ class ReadOnlyWorkTime implements IWorkTime {
 
     }
 
-    public Duration getWorkingDuration() {
-        if (WorkTimeValidator.validate(this)) {
-            return null;
-        }
-        Duration totalDuration = Duration.between(this.startingTime, this.endingTime);
-        Duration withBreak = totalDuration.minus(this.breakDuration);
-
-        return withBreak;
-    }
-
     @NonNull
     @Override
     public String toString() {
