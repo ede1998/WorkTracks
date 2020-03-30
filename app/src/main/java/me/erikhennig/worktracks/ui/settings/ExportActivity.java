@@ -10,17 +10,13 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import me.erikhennig.worktracks.AppRepository;
 import me.erikhennig.worktracks.WorkTracksApp;
@@ -76,7 +72,12 @@ public class ExportActivity extends FragmentActivity {
         try (BufferedWriter br = this.writeToUri(uri)) {
             List<IWorkTime> wts = this.repository.getAllWorkTimes();
 
-            CSVWorkTime.write(br, wts);
+            boolean result = CSVWorkTime.write(br, wts);
+
+            if (!result) {
+                Log.e(TAG, "Could not export all work times.");
+                Toast.makeText(this, "Exporting all worktimes failed.", Toast.LENGTH_LONG).show();
+            }
 
         } catch (FileNotFoundException e) {
             Toast.makeText(this, "Could not find file.", Toast.LENGTH_LONG).show();

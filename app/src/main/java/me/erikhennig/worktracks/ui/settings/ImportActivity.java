@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import me.erikhennig.worktracks.AppRepository;
@@ -40,7 +39,7 @@ public class ImportActivity extends FragmentActivity {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/*");
-        intent = Intent.createChooser(intent, "BLABLA");
+        intent = Intent.createChooser(intent, "Import work times");
 
         this.startActivityForResult(intent, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
     }

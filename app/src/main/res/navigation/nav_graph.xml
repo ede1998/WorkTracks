@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/TimeTableFragment">
+    app:startDestination="@id/TimeTableFragment"
+    tools:ignore="UnusedNavigation">
+    <!-- It actually is used but somehow the linter does not think so. -->
 
     <fragment
         android:id="@+id/TimeTableFragment"

@@ -60,6 +60,7 @@ public class RegexColorDecider implements TextWatcher {
             this.color = color;
         }
 
+        @SuppressWarnings("unused") // might be useful later
         public PatternForColor(Pattern pattern, int color) {
             this.pattern = pattern;
             this.color = color;

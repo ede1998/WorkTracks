@@ -1,7 +1,6 @@
 package me.erikhennig.worktracks.viewmodel;
 
 import android.app.Application;
-import android.media.ImageWriter;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;

@@ -10,9 +10,7 @@ import androidx.room.TypeConverters;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import me.erikhennig.worktracks.BuildConfig;
-
-@Database(entities = {WorkTimeEntity.class}, version = 3, exportSchema = true)
+@Database(entities = {WorkTimeEntity.class}, version = 3)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract WorkTimeDao workTimeDao();

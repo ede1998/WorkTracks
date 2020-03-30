@@ -1,5 +1,7 @@
 package me.erikhennig.worktracks.model;
 
+import androidx.annotation.NonNull;
+
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.List;
@@ -23,6 +25,7 @@ public class Week {
         return w;
     }
 
+    @SuppressWarnings("unused") // might be useful later
     public static Week of(int year, int weekOfYear) {
         Week w = new Week();
         w.firstDayOfWeek = LocalDate.of(year, 1, 1)
@@ -66,6 +69,7 @@ public class Week {
         return this.firstDayOfWeek.getYear();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format("Week([%s]-[%s])", this.getYear(), this.getWeek());

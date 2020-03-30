@@ -26,9 +26,7 @@ public class ResetDialogFragment extends DialogFragment {
         builder.setTitle("Reset");
         builder.setMessage("This action deletes all saved work times. Are you sure?");
 
-        builder.setPositiveButton(R.string.cancel, (dialogInterface, which) -> {
-            Log.i(TAG, "Cancelled reset.");
-        });
+        builder.setPositiveButton(R.string.cancel, (dialogInterface, which) -> Log.i(TAG, "Cancelled reset."));
         builder.setNegativeButton("OK", (di, which) -> this.reset());
 
         return builder.create();

@@ -11,6 +11,7 @@ class AccumulatingIterator<T> implements Iterator<T> {
     private final BinaryOperator<T> accumulatorFunction;
     private Iterator<T> sourceStreamIterator;
 
+    @SuppressWarnings("unused") // might be useful later
     public AccumulatingIterator(Collection<T> collection, T seed, BinaryOperator<T> accumulatorFunction)
     {
         this(collection.stream(), seed, accumulatorFunction);

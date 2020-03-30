@@ -34,9 +34,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="first day"
-            android:textAlignment="center"
             android:textColor="@android:color/primary_text_dark" />
 
         <TextView
@@ -55,9 +54,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="last day"
-            android:textAlignment="center"
             android:textColor="@android:color/primary_text_dark" />
 
         <ImageButton

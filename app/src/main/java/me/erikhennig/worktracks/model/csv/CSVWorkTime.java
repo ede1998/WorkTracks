@@ -8,7 +8,6 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvDate;
 import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.bean.CsvToBeanFilter;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
@@ -64,13 +63,11 @@ public class CSVWorkTime implements IWorkTime {
     }
 
     public static Stream<CSVWorkTime> read(Reader reader) {
-        Stream<CSVWorkTime> wts = new CsvToBeanBuilder<CSVWorkTime>(reader)
+        return new CsvToBeanBuilder<CSVWorkTime>(reader)
                 .withType(CSVWorkTime.class)
                 .withFilter(CSVWorkTime::isLineEmpty)
                 .build()
                 .stream();
-
-        return wts;
     }
 
     private static boolean isLineEmpty(String[] line) {
