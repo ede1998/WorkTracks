@@ -27,8 +27,6 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "work_tracks_database.db")
-                            .fallbackToDestructiveMigration()
-                            .setJournalMode(JournalMode.TRUNCATE)
                             .build();
                 }
             }

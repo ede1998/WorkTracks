@@ -31,8 +31,8 @@ This app uses the Gradle build system. To build this project, use the "gradlew b
 
 ## Planned features
 
+- [X] remove destructive migration to prevent possible data loss
 - [ ] create real and signed release
-- [ ] remove destructive migration to prevent possible data loss
 - [ ] move add button to top bar so it does not overlap other information
 - [ ] add work time per week parameter
 - [ ] remove unused settings
