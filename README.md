@@ -1,5 +1,7 @@
 # WorkTracks
 
+![Android CI](https://github.com/ede1998/WorkTracks/workflows/Android%20CI/badge.svg)
+
 WorkTacks is a simple app to track the time when you've been working.
 
 ## Features
