@@ -44,4 +44,8 @@
             app:title="Reset" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="About">
+        <Preference app:summary="Icon made by Freepik from www.flaticon.com" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
