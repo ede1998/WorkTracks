@@ -8,8 +8,6 @@ import androidx.preference.PreferenceManager;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,6 +40,9 @@ public class PreferenceUtils {
                 }
                 break;
             case WORKING_DAYS:
+                if (onChangeWorkingDays != null) {
+                    onChangeWorkingDays.onChangeWorkingDays(getWorkingDays(sharedPreferences));
+                }
                 break;
         }
     };
