@@ -73,11 +73,10 @@ public class PreferenceUtils {
 
     private static Duration getWeeklyWorkDuration(SharedPreferences preferences) {
         String duration = preferences.getString(WEEKLY_WORK_DURATION, "37:00");
-
         try {
             return chronoFormatter.parseDuration(duration);
         } catch (DateTimeParseException e) {
-            return null;
+            return Duration.ofHours(37);
         }
     }
 
