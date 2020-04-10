@@ -1,6 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/home/erik/android-studio-keystores/keystore.jks')
+            keyAlias = 'worktracks'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
