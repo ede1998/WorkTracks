@@ -33,9 +33,9 @@ This app uses the Gradle build system. To build this project, use the "gradlew b
 
 - [X] remove destructive migration to prevent possible data loss
 - [X] create real and signed release
+- [X] add work time per week parameter
+- [X] remove unused settings
 - [ ] move add button to top bar so it does not overlap other information
-- [ ] add work time per week parameter
-- [ ] remove unused settings
 - [ ] swipe left/right for new week
 - [ ] edit/delete workday by clicking
 - [ ] do not allow empty input when saving
