@@ -21,6 +21,9 @@ public class RegexColorDeciderFactory {
                 new RegexColorDecider.PatternForColor("^-?0?0:0?0$", neutralColor),
                 new RegexColorDecider.PatternForColor("^-\\d?\\d:\\d?\\d$", negativeColor),
                 new RegexColorDecider.PatternForColor("^\\d?\\d:\\d?\\d$", positiveColor),
+                new RegexColorDecider.PatternForColor("^-?0[.,]0+$", neutralColor),
+                new RegexColorDecider.PatternForColor("^-\\d+[.,]\\d+", negativeColor),
+                new RegexColorDecider.PatternForColor("^\\d+[.,]\\d+", positiveColor),
                 new RegexColorDecider.PatternForColor("^.*$", neutralColor));
     }
 

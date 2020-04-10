@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import me.erikhennig.worktracks.R;
-import me.erikhennig.worktracks.model.ChronoFormatter;
+import me.erikhennig.worktracks.model.chronoformatter.ChronoFormatter;
 import me.erikhennig.worktracks.model.IWorkTime;
 import me.erikhennig.worktracks.model.WorkTimeValidator;
 import me.erikhennig.worktracks.ui.colordecider.RegexColorDeciderFactory;
@@ -38,6 +38,7 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
     private WorkDayViewModel workDayViewModel;
     private KeyboardToggleFocusSaver focusSaver;
+    private ChronoFormatter chronoFormatter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,8 +49,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        workDayViewModel = new ViewModelProvider(requireActivity()).get(WorkDayViewModel.class);
-        focusSaver = new KeyboardToggleFocusSaver();
+        this.workDayViewModel = new ViewModelProvider(requireActivity()).get(WorkDayViewModel.class);
+        this.focusSaver = new KeyboardToggleFocusSaver();
+        this.chronoFormatter = ChronoFormatter.getInstance();
 
         view.<CalendarView>findViewById(R.id.calendar).setOnDateChangeListener((clickedView, year, zeroBasedMonth, day) -> {
             LocalDate selectedDate = LocalDate.of(year, zeroBasedMonth + 1, day);
@@ -88,15 +90,15 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
 
         switch (text.getId()) {
             case R.id.break_duration:
-                final Duration duration = parse(text.getText().toString(), ChronoFormatter::parseDuration, "break duration");
+                final Duration duration = parse(text.getText().toString(), this.chronoFormatter::parseDuration, "break duration");
                 this.workDayViewModel.setBreakDuration(duration);
                 break;
             case R.id.start:
-                final LocalTime start = parse(text.getText().toString(), ChronoFormatter::parseTime, "starting time");
+                final LocalTime start = parse(text.getText().toString(), this.chronoFormatter::parseTime, "starting time");
                 this.workDayViewModel.setStartingTime(start);
                 break;
             case R.id.end:
-                final LocalTime end = parse(text.getText().toString(), ChronoFormatter::parseTime, "ending time");
+                final LocalTime end = parse(text.getText().toString(), this.chronoFormatter::parseTime, "ending time");
                 this.workDayViewModel.setEndingTime(end);
                 break;
         }
@@ -144,9 +146,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
     private void updateInputFields(IWorkTime workTime) {
         View view = this.requireView();
 
-        String startingTime = format(workTime.getStartingTime(), ChronoFormatter::formatTime);
-        String endingTime = format(workTime.getEndingTime(), ChronoFormatter::formatTime);
-        String duration = format(workTime.getBreakDuration(), ChronoFormatter::formatDuration);
+        String startingTime = format(workTime.getStartingTime(), this.chronoFormatter::formatTime);
+        String endingTime = format(workTime.getEndingTime(), this.chronoFormatter::formatTime);
+        String duration = format(workTime.getBreakDuration(), this.chronoFormatter::formatDuration);
         boolean ignore = workTime.getIgnore();
         String comment = workTime.getComment();
 
@@ -174,12 +176,12 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         boolean isValid = WorkTimeValidator.validate(workTime);
         Duration duration = isValid ? Duration.between(workTime.getStartingTime(), workTime.getEndingTime()).minus(workTime.getBreakDuration()) : null;
         if (duration != null) {
-            durationString = ChronoFormatter.formatDuration(duration);
+            durationString = this.chronoFormatter.formatDuration(duration);
 
             // TODO extract as parameter
             final Duration expectedDuration = Duration.ofHours(7).plusMinutes(24);
             final Duration difference = duration.minus(expectedDuration);
-            differenceString = ChronoFormatter.formatDuration(difference);
+            differenceString = this.chronoFormatter.formatDuration(difference);
         }
 
         view.<TextView>findViewById(R.id.text_duration).setText(durationString);

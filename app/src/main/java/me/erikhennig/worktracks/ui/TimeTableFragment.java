@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import me.erikhennig.worktracks.R;
-import me.erikhennig.worktracks.model.ChronoFormatter;
+import me.erikhennig.worktracks.model.chronoformatter.ChronoFormatter;
 import me.erikhennig.worktracks.model.Week;
 import me.erikhennig.worktracks.model.WorkTimeWithTimeStatus;
 import me.erikhennig.worktracks.ui.colordecider.RegexColorDeciderFactory;
@@ -32,6 +32,7 @@ public class TimeTableFragment extends Fragment {
     private static final String TAG = TimeTableFragment.class.getName();
 
     private WorkWeekViewModel workWeekViewModel;
+    private ChronoFormatter chronoFormatter;
 
     @Override
     public View onCreateView(
@@ -45,6 +46,7 @@ public class TimeTableFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        this.chronoFormatter = ChronoFormatter.getInstance();
         this.workWeekViewModel = new ViewModelProvider(this.requireActivity()).get(WorkWeekViewModel.class);
         this.workWeekViewModel.getWorkTimes().observe(this.getViewLifecycleOwner(), this::updateTimeTable);
 
@@ -124,9 +126,9 @@ public class TimeTableFragment extends Fragment {
         LocalDate firstDay = currentWeek.getFirstDayOfWeek();
         LocalDate lastDay = currentWeek.getLastDayOfWeek();
 
-        week.setText(ChronoFormatter.formatWeek(currentWeek));
-        weekStart.setText(ChronoFormatter.formatDate(firstDay));
-        weekEnd.setText(ChronoFormatter.formatDate(lastDay));
+        week.setText(this.chronoFormatter.formatWeek(currentWeek));
+        weekStart.setText(this.chronoFormatter.formatDate(firstDay));
+        weekEnd.setText(this.chronoFormatter.formatDate(lastDay));
     }
 
     private void updateCard(View card, WorkTimeWithTimeStatus wt) {
@@ -138,17 +140,17 @@ public class TimeTableFragment extends Fragment {
         Log.i(TAG, String.format("Making card [%s] VISIBLE and updating it.", card.getId()));
         card.setVisibility(View.VISIBLE);
 
-        String weekDay = ChronoFormatter.formatDayOfWeek(wt.getDate().getDayOfWeek());
-        String date = ChronoFormatter.formatDate(wt.getDate());
-        String start = ChronoFormatter.formatTime(wt.getStartingTime());
-        String end = ChronoFormatter.formatTime(wt.getEndingTime());
+        String weekDay = this.chronoFormatter.formatDayOfWeek(wt.getDate().getDayOfWeek());
+        String date = this.chronoFormatter.formatDate(wt.getDate());
+        String start = this.chronoFormatter.formatTime(wt.getStartingTime());
+        String end = this.chronoFormatter.formatTime(wt.getEndingTime());
         String startTillEnd = String.format(Locale.getDefault(), "%s - %s", start, end);
-        String breakDuration = ChronoFormatter.formatDuration(wt.getBreakDuration());
+        String breakDuration = this.chronoFormatter.formatDuration(wt.getBreakDuration());
         String comment = wt.getComment();
 
-        String duration = ChronoFormatter.formatDuration(wt.getDuration());
-        String difference = ChronoFormatter.formatDuration(wt.getDifference());
-        String accumulatedDifference = ChronoFormatter.formatDuration(wt.getAccumulatedDifference());
+        String duration = this.chronoFormatter.formatDuration(wt.getDuration());
+        String difference = this.chronoFormatter.formatDuration(wt.getDifference());
+        String accumulatedDifference = this.chronoFormatter.formatDuration(wt.getAccumulatedDifference());
 
         card.<TextView>findViewById(R.id.text_date).setText(date);
         card.<TextView>findViewById(R.id.text_week_day).setText(weekDay);

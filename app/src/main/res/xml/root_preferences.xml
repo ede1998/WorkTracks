@@ -1,30 +1,32 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="Options">
 
         <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+            app:key="weekly_work_duration"
+            app:title="Work duration per Week"
+            app:defaultValue="37"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Display options">
+        <SwitchPreferenceCompat
+            app:key="duration_as_minutes"
+            app:defaultValue="true"
+            app:summaryOn="Display durations with minutes (01:24)"
+            app:summaryOff="Display durations as decimal (1,4)"
+            app:title="Duration" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="Import/Export">
-        <Preference app:title="import all">
+        <Preference app:title="Import all">
             <intent
                 android:targetClass="me.erikhennig.worktracks.ui.settings.ImportActivity"
                 android:targetPackage="me.erikhennig.worktracks" />
         </Preference>
-        <Preference app:title="export all">
+        <Preference app:title="Export all">
             <intent
                 android:targetClass="me.erikhennig.worktracks.ui.settings.ExportActivity"
                 android:targetPackage="me.erikhennig.worktracks" />
@@ -32,22 +34,9 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Reset">
-        <Preference app:title="Reset" app:key="reset"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/sync_header">
-
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
-
+        <Preference
+            app:key="reset"
+            app:title="Reset" />
     </PreferenceCategory>
 
 </PreferenceScreen>
