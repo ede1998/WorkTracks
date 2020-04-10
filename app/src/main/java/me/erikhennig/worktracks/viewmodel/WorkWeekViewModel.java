@@ -13,7 +13,9 @@ import me.erikhennig.worktracks.AppRepository;
 import me.erikhennig.worktracks.WorkTracksApp;
 import me.erikhennig.worktracks.model.IWorkTime;
 import me.erikhennig.worktracks.model.Week;
+import me.erikhennig.worktracks.model.WorkTimeConfiguration;
 import me.erikhennig.worktracks.model.WorkTimeWithTimeStatus;
+import me.erikhennig.worktracks.model.WorkTimeWithTimeStatusFactory;
 
 public class WorkWeekViewModel extends AndroidViewModel {
 
@@ -22,6 +24,7 @@ public class WorkWeekViewModel extends AndroidViewModel {
 
     private Week week;
     private LiveData<List<IWorkTime>> workTimes;
+    private WorkTimeWithTimeStatusFactory factory;
 
     public WorkWeekViewModel(@NonNull Application application) {
         super(application);
@@ -53,11 +56,16 @@ public class WorkWeekViewModel extends AndroidViewModel {
     }
 
     private void updateData(List<IWorkTime> workTimes) {
-        List<WorkTimeWithTimeStatus> list = WorkTimeWithTimeStatus.create(workTimes);
+        if (this.factory == null) return;
+        List<WorkTimeWithTimeStatus> list = this.factory.create(workTimes);
         this.data.setValue(list);
     }
 
     public Week getWeek() {
         return this.week;
+    }
+
+    public void updateConfiguration(WorkTimeConfiguration configuration) {
+        this.factory = new WorkTimeWithTimeStatusFactory(configuration);
     }
 }

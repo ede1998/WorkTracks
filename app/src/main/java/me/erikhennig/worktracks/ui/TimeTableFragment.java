@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import me.erikhennig.worktracks.R;
+import me.erikhennig.worktracks.model.PreferenceUtils;
+import me.erikhennig.worktracks.model.WorkTimeConfiguration;
 import me.erikhennig.worktracks.model.chronoformatter.ChronoFormatter;
 import me.erikhennig.worktracks.model.Week;
 import me.erikhennig.worktracks.model.WorkTimeWithTimeStatus;
@@ -48,7 +50,10 @@ public class TimeTableFragment extends Fragment {
 
         this.chronoFormatter = ChronoFormatter.getInstance();
         this.workWeekViewModel = new ViewModelProvider(this.requireActivity()).get(WorkWeekViewModel.class);
+        this.workWeekViewModel.updateConfiguration(WorkTimeConfiguration.fromPreferences(this.requireContext()));
         this.workWeekViewModel.getWorkTimes().observe(this.getViewLifecycleOwner(), this::updateTimeTable);
+        PreferenceUtils.setOnChangeWeeklyWorkDuration(duration -> WorkTimeConfiguration.fromPreferences(this.requireContext()));
+        PreferenceUtils.setOnChangeWorkingDays(duration -> WorkTimeConfiguration.fromPreferences(this.requireContext()));
 
         view.findViewById(R.id.button_add_or_edit).setOnClickListener(clickedView -> this.navigateToAddOrEdit());
         view.findViewById(R.id.button_next_week).setOnClickListener(clickedView -> this.workWeekViewModel.increaseWeek());

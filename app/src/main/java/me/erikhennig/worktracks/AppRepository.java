@@ -61,7 +61,7 @@ public class AppRepository {
         try {
             return f.get();
         } catch (ExecutionException | InterruptedException e) {
-            // TODO add logging?
+            Log.e(TAG, String.format("Exception happened [%s].", e.toString()));
         }
         return null;
     }

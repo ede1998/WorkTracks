@@ -5,25 +5,46 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import me.erikhennig.worktracks.model.chronoformatter.ChronoFormatter;
 
 public class PreferenceUtils {
 
     public static final String WEEKLY_WORK_DURATION = "weekly_work_duration";
+    public static final String WORKING_DAYS = "working_days";
     public static final String DURATION_AS_MINUTES = "duration_as_minutes";
     public static final String RESET = "reset";
 
+    private static ChronoFormatter chronoFormatter = ChronoFormatter.getInstance();
+
     private static OnChangeDurationDisplay onChangeDurationDisplay;
+    private static OnChangeWeeklyWorkDuration onChangeWeeklyWorkDuration;
+    private static OnChangeWorkingDays onChangeWorkingDays;
+
     private static SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
-        if (onChangeDurationDisplay != null && DURATION_AS_MINUTES.equals(key)) {
-            boolean showMinutes = sharedPreferences.getBoolean(DURATION_AS_MINUTES, true);
-            onChangeDurationDisplay.onChangeDurationDisplay(createDurationDisplay(showMinutes));
+        switch (key) {
+            case WEEKLY_WORK_DURATION:
+                if (onChangeWeeklyWorkDuration != null) {
+                    onChangeWeeklyWorkDuration.onChangeWeeklyWorkDuration(getWeeklyWorkDuration(sharedPreferences));
+                }
+                break;
+            case DURATION_AS_MINUTES:
+                if (onChangeDurationDisplay != null) {
+                    onChangeDurationDisplay.onChangeDurationDisplay(getDurationDisplay(sharedPreferences));
+                }
+                break;
+            case WORKING_DAYS:
+                break;
         }
     };
-    private static ChronoFormatter chronoFormatter = ChronoFormatter.getInstance();
 
     private PreferenceUtils() {
     }
@@ -40,9 +61,18 @@ public class PreferenceUtils {
         getSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
     }
 
+    @FunctionalInterface
+    public interface OnChangeWeeklyWorkDuration {
+        void onChangeWeeklyWorkDuration(Duration duration);
+    }
+
     public static Duration getWeeklyWorkDuration(Context context) {
-        String duration = getSharedPreferences(context).getString(WEEKLY_WORK_DURATION, null);
-        if (duration == null) return null;
+        return getWeeklyWorkDuration(getSharedPreferences(context));
+    }
+
+    private static Duration getWeeklyWorkDuration(SharedPreferences preferences) {
+        String duration = preferences.getString(WEEKLY_WORK_DURATION, "37:00");
+
         try {
             return chronoFormatter.parseDuration(duration);
         } catch (DateTimeParseException e) {
@@ -50,13 +80,13 @@ public class PreferenceUtils {
         }
     }
 
+    public static void setOnChangeWeeklyWorkDuration(OnChangeWeeklyWorkDuration callback) {
+        onChangeWeeklyWorkDuration = callback;
+    }
+
     public enum DurationDisplay {
         WITH_MINUTES,
         AS_DECIMAL
-    }
-
-    private static DurationDisplay createDurationDisplay(boolean withMinutes) {
-        return withMinutes ? DurationDisplay.WITH_MINUTES : DurationDisplay.AS_DECIMAL;
     }
 
     @FunctionalInterface
@@ -69,8 +99,33 @@ public class PreferenceUtils {
     }
 
     public static DurationDisplay getDurationDisplay(Context context) {
-        boolean showMinutes = getSharedPreferences(context).getBoolean(DURATION_AS_MINUTES, true);
-        return createDurationDisplay(showMinutes);
+        return getDurationDisplay(getSharedPreferences(context));
     }
 
+    private static DurationDisplay getDurationDisplay(SharedPreferences preferences) {
+        boolean showMinutes = preferences.getBoolean(DURATION_AS_MINUTES, true);
+        return showMinutes ? DurationDisplay.WITH_MINUTES : DurationDisplay.AS_DECIMAL;
+    }
+
+    @FunctionalInterface
+    public interface OnChangeWorkingDays {
+        void onChangeWorkingDays(Set<DayOfWeek> workingDays);
+    }
+
+    public static void setOnChangeWorkingDays(OnChangeWorkingDays callback) {
+        onChangeWorkingDays = callback;
+    }
+
+    public static Set<DayOfWeek> getWorkingDays(Context context) {
+        return getWorkingDays(getSharedPreferences(context));
+    }
+
+    private static Set<DayOfWeek> getWorkingDays(SharedPreferences preferences) {
+        Set<String> defaultDays = Stream.of(1,2,3,4,5).map(Object::toString).collect(Collectors.toSet());
+        Set<String> p = preferences.getStringSet(WORKING_DAYS, defaultDays);
+        return p.stream()
+                .map(Integer::parseInt)
+                .map(DayOfWeek::of)
+                .collect(Collectors.toSet());
+    }
 }

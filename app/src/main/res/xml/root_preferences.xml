@@ -4,19 +4,24 @@
     <PreferenceCategory app:title="Options">
 
         <EditTextPreference
+            app:defaultValue="37"
             app:key="weekly_work_duration"
             app:title="Work duration per Week"
-            app:defaultValue="37"
             app:useSimpleSummaryProvider="true" />
-
+        <MultiSelectListPreference
+            app:defaultValue="@array/default_work_days"
+            app:entries="@array/weekdays"
+            app:entryValues="@array/weekdays_values"
+            app:key="working_days"
+            app:title="Working days" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Display options">
         <SwitchPreferenceCompat
-            app:key="duration_as_minutes"
             app:defaultValue="true"
-            app:summaryOn="Display durations with minutes (01:24)"
+            app:key="duration_as_minutes"
             app:summaryOff="Display durations as decimal (1,4)"
+            app:summaryOn="Display durations with minutes (01:24)"
             app:title="Duration" />
     </PreferenceCategory>
 
