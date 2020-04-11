@@ -20,6 +20,10 @@ public class PreferenceUtils {
     public static final String WORKING_DAYS = "working_days";
     public static final String DURATION_AS_MINUTES = "duration_as_minutes";
     public static final String RESET = "reset";
+    public static final String ICON_ATTRIBUTION = "icon_attribution";
+    public static final String PROJECT_WEB_PAGE = "project_web_page";
+    public static final String VERSION_CODE = "version_code";
+    public static final String VERSION_NAME = "version_name";
 
     private static ChronoFormatter chronoFormatter = ChronoFormatter.getInstance();
 

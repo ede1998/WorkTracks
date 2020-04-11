@@ -14,6 +14,7 @@
     <string name="previous_week">previous week</string>
     <string name="next_week">next week</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="icon_attribution_link">https://www.flaticon.com/free-icon/work_1584911?term=work&amp;page=1&amp;position=54</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

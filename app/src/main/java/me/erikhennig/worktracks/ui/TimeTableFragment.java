@@ -55,7 +55,6 @@ public class TimeTableFragment extends Fragment {
         PreferenceUtils.setOnChangeWeeklyWorkDuration(duration -> WorkTimeConfiguration.fromPreferences(this.requireContext()));
         PreferenceUtils.setOnChangeWorkingDays(duration -> WorkTimeConfiguration.fromPreferences(this.requireContext()));
 
-        view.findViewById(R.id.button_add_or_edit).setOnClickListener(clickedView -> this.navigateToAddOrEdit());
         view.findViewById(R.id.button_next_week).setOnClickListener(clickedView -> this.workWeekViewModel.increaseWeek());
         view.findViewById(R.id.button_previous_week).setOnClickListener(clickedView -> this.workWeekViewModel.decreaseWeek());
         view.findViewById(R.id.text_current_week).setOnClickListener(clickedView -> this.gotoCurrentWeek());
@@ -95,11 +94,6 @@ public class TimeTableFragment extends Fragment {
             elements.add(allWeekTimes.getChildAt(i).findViewById(elementId));
         }
         return elements;
-    }
-
-    private void navigateToAddOrEdit() {
-        Log.i(TAG, "Swapping to add or edit fragment.");
-        NavHostFragment.findNavController(TimeTableFragment.this).navigate(R.id.action_to_add_or_edit);
     }
 
     private void updateTimeTable(List<WorkTimeWithTimeStatus> timesInWeek) {

@@ -45,7 +45,27 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="About">
-        <Preference app:summary="Icon made by Freepik from www.flaticon.com" />
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:key="version_name"
+            app:title="Version name" />
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:key="version_code"
+            app:title="Version code" />
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:key="project_web_page"
+            app:summary="https://github.com/ede1998/WorkTracks"
+            app:title="Project web page" />
+        <Preference
+            app:icon="@mipmap/ic_launcher"
+            app:key="icon_attribution"
+            app:summary="Icon made by Freepik from www.flaticon.com"
+            app:title="Attribution" />
     </PreferenceCategory>
 
 </PreferenceScreen>
