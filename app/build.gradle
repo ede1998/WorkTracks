@@ -21,8 +21,10 @@ def getVersionName = { ->
 android {
     signingConfigs {
         release {
-            storeFile file('/home/erik/android-studio-keystores/keystore.jks')
-            keyAlias = 'worktracks'
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword = RELEASE_STORE_PASSWORD
+            keyAlias = RELEASE_KEY_ALIAS
+            keyPassword = RELEASE_KEY_PASSWORD
         }
     }
     compileSdkVersion 29
@@ -49,6 +51,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
