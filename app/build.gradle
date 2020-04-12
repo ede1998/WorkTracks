@@ -28,6 +28,9 @@ android {
 			keyPassword = RELEASE_KEY_PASSWORD
 		}
 	}
+	else {
+	release {}
+	}
     }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
