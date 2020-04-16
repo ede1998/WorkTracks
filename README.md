@@ -37,7 +37,7 @@ This app uses the Gradle build system. To build this project, use the "gradlew b
 - [X] remove unused settings
 - [X] design icon (used icon from internet)
 - [X] move add button to top bar so it does not overlap other information
+- [X] do not allow empty input when saving
 - [ ] swipe left/right for new week
 - [ ] edit/delete workday by clicking
-- [ ] do not allow empty input when saving
 - [ ] enable preview of work time for entire week in add or edit fragment

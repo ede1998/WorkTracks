@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.function.IntFunction;
 
@@ -61,6 +62,10 @@ public class ChronoFormatter implements PreferenceUtils.OnChangeDurationDisplay 
     }
 
     public LocalTime parseTime(String input) {
+        final int charactersBeforeColon = input.indexOf(':');
+        final int zerosToInsert = 2 - charactersBeforeColon;
+        final String zeroes = String.join("", Collections.nCopies(zerosToInsert, "0"));
+        input = zeroes + input;
         return LocalTime.parse(input);
     }
 

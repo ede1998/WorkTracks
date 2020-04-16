@@ -134,6 +134,9 @@ public class AddOrEditEntryFragment extends Fragment implements View.OnFocusChan
         boolean wasSaved = this.workDayViewModel.save();
         if (!wasSaved) {
             Log.e(TAG, String.format("Invalid work time [%s].", this.workDayViewModel.getWorkTime()));
+            String errorMessage = "Not all required input fields were filled.";
+            Snackbar snackbar = Snackbar.make(view, errorMessage, Snackbar.LENGTH_SHORT);
+            snackbar.show();
             return;
         }
 
